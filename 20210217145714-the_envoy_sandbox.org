@@ -1,0 +1,350 @@
+#+title: the envoy sandbox
+#+PROPERTY: header-args:tmux :socket ~/.tmux-learn2 :session learning
+#+PROPERTY: header-args:shell :dir /ssh:learning:~/
+
+
+In the docs for [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] they offer a sandbox, as a way to better understand the system.
+
+At its simplest, I'd like to use envoy as a front proxy that can host several docker apps.  It would be cool to have a docker app for wordpress and one for our blog so i can see the routing in action.
+
+So let's explore!
+
+* Dependencies
+We want docker, docker-compose, git, the envoy repo, and some command line tools.
+I'll check on my remote machine that I hae everything i need
+** Docker and Docker-compose
+#+BEGIN_SRC shell
+docker --version
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Docker version 20.10.3, build 48d30b5
+#+end_example
+
+#+BEGIN_SRC shell
+docker-compose --version
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+docker-compose version 1.25.0, build unknown
+#+end_example
+** Git
+#+BEGIN_SRC shell
+git --version
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+git version 2.25.1
+#+end_example
+
+** Envoy repo
+we'll need to clone it down, then do all our work from there.
+
+#+BEGIN_SRC tmux
+git clone https://github.com/envoyproxy/envoy.git
+#+END_SRC
+
+We can now check it out
+#+BEGIN_SRC shell
+cd ~/envoy
+tree -L 1
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+.
+├── api
+├── bazel
+├── BUILD
+├── ci
+├── CODE_OF_CONDUCT.md
+├── CODEOWNERS
+├── configs
+├── CONTRIBUTING.md
+├── DCO
+├── DEPENDENCY_POLICY.md
+├── DEPRECATED.md
+├── DEVELOPER.md
+├── docs
+├── examples
+├── EXTENSION_POLICY.md
+├── generated_api_shadow
+├── GOVERNANCE.md
+├── include
+├── LICENSE
+├── NOTICE
+├── OWNERS.md
+├── PULL_REQUESTS.md
+├── PULL_REQUEST_TEMPLATE.md
+├── README.md
+├── RELEASES.md
+├── repokitteh.star
+├── REPO_LAYOUT.md
+├── restarter
+├── security
+├── SECURITY.md
+├── source
+├── STYLE.md
+├── support
+├── test
+├── tools
+├── VERSION
+└── WORKSPACE
+
+14 directories, 23 files
+#+end_example
+
+** Additional good stuff
+jq for json parsing, openssl for the tls layer, curl for our requests, and redis for caching
+#+BEGIN_SRC tmux
+sudo apt install -y jq openssl curl redis
+#+END_SRC
+
+* Setup our front proxy
+We'll go into the envoy folder, and check out their front-proxy example.  Here they have a couple of flask apps set up and the envoy proxy to direct traffic to them.
+
+** See it in action
+First, I want to see that it actually works, then dig into how i t works.
+*** Start up Containers
+#+BEGIN_SRC tmux
+cd ~/envoy/examples/front-proxy
+docker-compose buiild --pull
+docker-compose up -d
+#+END_SRC
+
+And confirm they're running
+
+#+BEGIN_SRC shell
+cd ~/envoy/examples/front-proxy
+docker-compose ps
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+ii@zachmandeville-control-plane-qzlpw:~/envoy/examples/front-proxy$           Name                         Command               State                                  Ports
+----------------------------------------------------------------------------------------------------------------------------------------
+8001/tcp, 0.0.0.0:8080->8080/tcp,
+8443/tcp
+front-proxy_service1_1      /bin/sh /usr/local/bin/sta ...   Up      10000/tcp
+front-proxy_service2_1      /bin/sh /usr/local/bin/sta ...   Up      10000/tcp
+#+end_example
+
+*** Check Routing
+
+We have two services, that should be called at the same url but with paths /service/1 and /service/2
+
+#+BEGIN_SRC shell
+curl -v localhost:8080/service/1
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+,*   Trying ::1:8080...
+,* TCP_NODELAY set
+,* connect to ::1 port 8080 failed: Connection refused
+,*   Trying 127.0.0.1:8080...
+,* TCP_NODELAY set
+0)
+GET /service/1 HTTP/1.1
+Host: localhost:8080
+User-Agent: curl/7.68.0
+Accept: */*
+,* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: text/html; charset=utf-8
+< content-length: 89
+< server: envoy
+< date: Wed, 17 Feb 2021 02:31:39 GMT
+< x-envoy-upstream-service-time: 39
+< 
+Hello from behind Envoy (service 1)! hostname: 061e2c3f7c25 resolvedhostname: 172.19.0.4
+0 to host localhost left intact
+#+end_example
+
+As you see, we are getting a hello from behind Envoy, and the hostname is the docker id for service1
+
+This should work, same way, for service/2
+
+#+BEGIN_SRC shell
+curl -v localhost:8080/service/2
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+,*   Trying ::1:8080...
+,* TCP_NODELAY set
+,* connect to ::1 port 8080 failed: Connection refused
+,*   Trying 127.0.0.1:8080...
+,* TCP_NODELAY set
+0)
+GET /service/2 HTTP/1.1
+Host: localhost:8080
+User-Agent: curl/7.68.0
+Accept: */*
+,* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: text/html; charset=utf-8
+< content-length: 89
+< server: envoy
+< date: Wed, 17 Feb 2021 02:33:01 GMT
+< x-envoy-upstream-service-time: 35
+< 
+Hello from behind Envoy (service 2)! hostname: 9bfb3f10853b resolvedhostname: 172.19.0.2
+0 to host localhost left intact
+#+end_example
+
+this should also work with https
+#+BEGIN_SRC shell
+ curl https://localhost:8443/service/1 -k -v
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+,*   Trying ::1:8443...
+,* TCP_NODELAY set
+,* connect to ::1 port 8443 failed: Connection refused
+,*   Trying 127.0.0.1:8443...
+,* TCP_NODELAY set
+0)
+,* ALPN, offering h2
+,* ALPN, offering http/1.1
+,* successfully set certificate verify locations:
+,*   CAfile: /etc/ssl/certs/ca-certificates.crt
+  CApath: /etc/ssl/certs
+,* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+,* TLSv1.3 (IN), TLS handshake, Server hello (2):
+,* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+,* TLSv1.3 (IN), TLS handshake, Certificate (11):
+,* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+,* TLSv1.3 (IN), TLS handshake, Finished (20):
+,* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+,* TLSv1.3 (OUT), TLS handshake, Finished (20):
+,* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
+,* ALPN, server did not agree to a protocol
+,* Server certificate:
+,*  subject: CN=front-envoy
+,*  start date: Jul  8 01:31:46 2020 GMT
+,*  expire date: Jul  6 01:31:46 2030 GMT
+,*  issuer: CN=front-envoy
+,*  SSL certificate verify result: self signed certificate (18), continuing anyway.
+GET /service/1 HTTP/1.1
+Host: localhost:8443
+User-Agent: curl/7.68.0
+Accept: */*
+,* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+,* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+,* old SSL session ID is stale, removing
+,* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: text/html; charset=utf-8
+< content-length: 89
+< server: envoy
+< date: Wed, 17 Feb 2021 02:36:10 GMT
+< x-envoy-upstream-service-time: 2
+< 
+Hello from behind Envoy (service 1)! hostname: 061e2c3f7c25 resolvedhostname: 172.19.0.4
+0 to host localhost left intact
+#+end_example
+
+This isn't reachable if i go to https://learning.sharing.io:8443/service/1 though.  only http works on that domain, likelyc os of the self-signed cert.
+
+*** check out load balancing
+We'll increase our service1 from 1 to 3 servers
+#+BEGIN_SRC tmux
+cd ~/envoy/examples/front-proxy
+docker-compose scale service1=3
+#+END_SRC
+
+#+BEGIN_SRC shell
+curl -v localhost:8080/service/1
+curl -v localhost:8080/service/1
+curl -v localhost:8080/service/1
+curl -v localhost:8080/service/1
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Hello from behind Envoy (service 1)! hostname: 061e2c3f7c25 resolvedhostname: 172.19.0.4
+Hello from behind Envoy (service 1)! hostname: 08963888e306 resolvedhostname: 172.19.0.5
+Hello from behind Envoy (service 1)! hostname: 061e2c3f7c25 resolvedhostname: 172.19.0.4
+Hello from behind Envoy (service 1)! hostname: 9de32f894020 resolvedhostname: 172.19.0.6
+#+end_example
+
+as you see, it moves between which docker container it uses to serve the request.
+
+* How front proxy is setup
+#+BEGIN_SRC shell
+cd ~/envoy/examples/front-proxy
+tree
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+.
+├── docker-compose.yaml
+├── Dockerfile-frontenvoy
+├── Dockerfile-jaeger-service
+├── Dockerfile-service
+├── front-envoy.yaml
+├── README.md
+├── service-envoy.yaml
+├── service.py
+├── start_service.sh
+└── verify.sh
+
+0 directories, 10 files
+#+end_example
+
+All of this is setup in the docker-compose.yaml.  What does it look like?
+
+#+BEGIN_SRC shell
+cat ~/envoy/examples/front-proxy/docker-compose.yaml
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+version: "3.7"
+services:
+
+  front-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontenvoy
+    networks:
+      - envoymesh
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+      - "8001:8001"
+
+  service1:
+    build:
+      context: .
+      dockerfile: Dockerfile-service
+    volumes:
+      - ./service-envoy.yaml:/etc/service-envoy.yaml
+    networks:
+      - envoymesh
+    environment:
+      - SERVICE_NAME=1
+
+  service2:
+    build:
+      context: .
+      dockerfile: Dockerfile-service
+    volumes:
+      - ./service-envoy.yaml:/etc/service-envoy.yaml
+    networks:
+      - envoymesh
+    environment:
+      - SERVICE_NAME=2
+
+networks:
+  envoymesh: {}
+#+end_example

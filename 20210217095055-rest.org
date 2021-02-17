@@ -1,0 +1,3 @@
+#+title: REST
+
+REpresentational State Transfer.  One of the two primary models of API design (the other being RPC, evolved to [[file:20210217094935-grpc.org][gRPC]]).  You provide messages from client to server that include an HTTP verb, a header, the path to the resource you want, and an optional message in the body of the request.  The server responds with the info you need.  APIs with `GET /user/:id` are examples of REST api's

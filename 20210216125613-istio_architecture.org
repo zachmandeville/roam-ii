@@ -1,0 +1,3 @@
+#+title: istio architecture
+
+Explanation of istio architecture, which uses [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] as its control plane.  Istio is a good example of a service mesh

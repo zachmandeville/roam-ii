@@ -1,0 +1,7 @@
+#+title: Data Plane Versus Control Plane
+
+Article by [[file:20210216103855-matt_klein.org][Matt Klein]] discussing intricacies of a service mesh.
+
+----
+
+[[file:20210216102259-envoy_proxy.org][Envoy Proxy]]

@@ -1,0 +1,25 @@
+#+title: flow
+
+My current flow, a big todo of needs and such
+
+* Projects
+** Better Understand envoy
+*** TODO Compile good set of resources
+:LOGBOOK:
+CLOCK: [2021-02-16 Tue 14:38]
+CLOCK: [2021-02-16 Tue 12:31]--[2021-02-16 Tue 12:56] =>  0:25
+CLOCK: [2021-02-16 Tue 11:06]--[2021-02-16 Tue 11:31] =>  0:25
+CLOCK: [2021-02-16 Tue 10:35]--[2021-02-16 Tue 11:00] =>  0:25
+:END:
+*** TODO setup k8s cluster for practicing with envoy
+*** TODO set up envoy using getting started guide
+** NCW
+*** TODO Attend Contribex Meeting
+SCHEDULED: <2021-02-16 Tue 13:00>
+
+*** TODO Write full, useful article for session 01
+*** TODO Style session 01 into a beautiful, easy to parse export
+*** TODO capture changes needed in org file for this export
+*** TODO export into reveal presentation
+*** TODO Document changes needed to get working reveal presentation
+*** TODO explore having both exports work from one file, else find alternative

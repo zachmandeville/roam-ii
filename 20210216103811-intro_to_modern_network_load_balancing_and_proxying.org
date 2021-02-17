@@ -1,0 +1,33 @@
+#+title: Intro to modern network load balancing and proxying
+
+Intro to [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] from its lead designer [[file:20210216103855-matt_klein.org][Matt Klein]]
+https://blog.envoyproxy.io/introduction-to-modern-network-load-balancing-and-proxying-a57f6ff80236
+
+When talking about network load balancers, load balancer and proxy is used pretty interchangably.  Not all proxies are load blaancers, but the vast majority of them perform load balancing as a primary function
+
+* Load balancer layers
+typically you ahve L4 and L7, envoy is an L7.  L stands for layer and maps to the layers in the [[file:20210216104518-osi_model.org][OSI MODEL]]. Envoy is an L7 proxy.
+<#+begin_quote
+The key takeaway of this section is that an L4 load balancer typically operates only at the level of the L4 TCP/UDP connection/session. Thus the load balancer roughly shuffles bytes back and forth, and makes sure that bytes from the same session wind up at the same backend. The L4 load balancer is unaware of any application details of the bytes that it is shuffling. The bytes could be HTTP, Redis, MongoDB, or any other application protocol.
+#+end_quote
+
+L7 is important for modern protocols where multiplexing is the norm (multiplexing meaning sending concurrent application requests over a single l4 connection).  l7 maintains one connection to client, but can distribute its streams to multiple backends, better balancing the load even when sent diff requests per minute from the application.
+
+* Load Balancer features
+** Service Discovery
+Process by which load balancer determines set of available backends
+** Health Check
+LB determines if backend is available to server traffic
+** Load Balancing
+Given a set of healthy backends, how is the backend selected to serve a connection or request?
+One of the most popular algorithms for load balancing is the [[https://brooker.co.za/blog/2012/01/17/two-random.html][power of 2 least request load]]
+** Sticky Sessions
+In certain applications, there is a need for requests to always go to the same session.  This handles it, though this is an inherently fragile design model.
+** TLS Termination
+termination, certificate verification and pinning, certificate serving and more
+** Observability
+export logs, stats, traces that help operators figure out what's wrong.
+** Security and DoS Mitigation
+security features like rate limiting, authentication, and DoS mitigation (ip tagging, tarpitting, etc)
+** Config and Control Plane
+Load balancers need to be configure and in large deployments, this can be a substantial undertaking.  Control plane helps with the undertaking.

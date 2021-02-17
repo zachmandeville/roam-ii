@@ -1,0 +1,55 @@
+#+title: Getting Started with Envoy
+
+Tutorials from ambassador.io
+
+* Part 1
+[[https://www.getambassador.io/resources/getting-started-envoyproxy-microservices-resilience/][Part 1 link]]
+this is an introduction envoy itself and why it's so promising.
+**Noted takeaways:**
+- in a setup, there's two typs envoy's running. There's an 'edge envoy' running
+  by itself somewhere. This is the point of contact from the external world, the
+  ingress, and it then determines where the requests to envoy should be sent.
+  Then there's the service envoys, sidecars to each service, that handle calls
+  amongst themselves and to their specific service. It is all of these talking
+  together that forms the envoy mesh.
+
+It looks like envoy configuration is done through json. It works with
+'listeners' and 'clusters'. A ~listener~ is a tells envoy of a TCP port it
+should be listening to, and a set of filters that tell how envoy should process
+what it hears from this port.
+
+The cluster is a set of services, or backend hosts, that can proxy these
+incoming requests.
+
+The filters each will have their own configuration, and this can get quite
+complex.
+
+The intro then showed a couple sample config files and while the language was a
+bit new, they are quite straightforward.
+* Part 2
+[[https://www.getambassador.io/resources/envoy-flask-kubernetes/][Part 2 Link]]
+
+this attempts to show basic load-balancing using envoy. They have a repo setup
+with all the deployment yamls already written, wioth the idea that you deploy a
+flask app onto your minikube cluster that has a /user endpoint you want to
+query. Then, you deploy envoy, both the edge envoy deployment and as a sidecar
+to the flask app, and setup the config so that instead of pinging the flask app
+directly, you make a request to envoy and it sends it to flask. It finally shows
+how to scale up the flask app, and set up an SDS (service discovery service) for
+envoy so that it can switch, round-robin style, between the various flask hosts
+when making requests.
+
+Unfortunately, the flask app would not work for me. It continued to give an
+error of being unable to find `is_xhr`. It looks to be due to using an older
+version of flask, but even when I tried to update the requirements.txt to the
+latest version, it still gave that error. I didn't want to spend time debugging
+the web app, an so I read through the example but wasn't able to do it hands on.
+Due to this, I am not continuing on to part 3.
+*  Part 3
+[[https://www.getambassador.io/resources/envoy-as-api-gateway/][Part 3 Link]]
+
+This is about deploying the whole app and envoy to a GCS or AWS cluster.
+
+----
+
+[[file:20210216102259-envoy_proxy.org][Envoy Proxy]] [[file:20210217092404-tutorials.org][Tutorials]]

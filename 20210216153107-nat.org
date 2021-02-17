@@ -1,0 +1,8 @@
+#+title: NAT
+
+The process of using connection tracking data to alter IP/port information of packets as they traverse the load balancer.
+
+
+----
+
+[[file:20210216153039-service_mesh.org][service mesh]]

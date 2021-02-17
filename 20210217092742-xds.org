@@ -1,0 +1,3 @@
+#+title: xDS
+
+The protocol used by [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] for resource discovery and and querying management services.  An alternative of sorts to [[file:20210217093106-openapi.org][openAPI]]

@@ -1,0 +1,5 @@
+#+title: connection tracking
+
+he process of keeping track of the state of all active TCP connections. This includes data such as whether the handshake has completed, whether a FIN has been received, how long the connection has been idle, which backend has been selected for the connection, etc.
+
+----

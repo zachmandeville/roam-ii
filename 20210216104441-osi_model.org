@@ -1,0 +1,10 @@
+#+title: OSI Model
+https://en.wikipedia.org/wiki/OSI_model
+
+7.
+6.
+   5.
+      4.
+         3.
+            2.
+               1

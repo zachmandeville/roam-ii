@@ -1,0 +1,93 @@
+#+title: mapping nginx to envoy
+
+
+* Setup
+
+I have a remote server with tmux setup, that I created a local socket for following
+instructions in the [[https://github.com/ahendriksen/ob-tmux#sockets-remoting][ob-tmux readme]]
+
+This allows me to run commands in tmux blocks here, that are executed on our server
+
+#+BEGIN_SRC tmux :socket ~/.tmux-local-socket-remote-machine3 :session learning
+echo 'hello from org-mode!'
+#+END_SRC
+
+I can also execute return results here, using shell blocks.
+
+#+BEGIN_SRC shell :dir /ssh:learning:~
+ls wordpress
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+docker-compose.yml
+#+end_example
+
+* Context
+At the moment, I have a single wordpress app running at port 8000.
+I have ~learning.sharing.io~ pointing to this app.
+What I want is to have /wp point to this service.
+
+We'll setup an envoy folder in which we'll hold our ~envoy.yaml~ config file.
+#+BEGIN_SRC tmate :session proxy
+mkdir envoy
+#+END_SRC
+
+
+* Listener
+The most important part of setting up yr envoy is to set up the listeners, telling envoy which ports to be listening in for connections
+
+The first part of our envoy.yaml file, then, will configure the listener.
+
+#+NAME: envoy listeners
+#+BEGIN_SRC yaml :tangle /ssh:learning:~/envoy/envoy.yaml :comments no
+static_resources:
+  listeners:
+  - name: listener_0
+    address:
+      socket_address: { address: 0.0.0.0, port_value: 8080 }
+#+END_SRC
+
+This creates a new listener bound to port 8080 (we'll revisit and bind to 80 later).
+We dont' need to define the server name, as our envoy filters will handle this.
+* Filters
+The filters define how to handle and process incoming requests.  They can route them to our various clusters, process the data coming in (like doing a gzip or authentication) and more.  For now, we just want ot listen for certain domains and pass them to the right ports/apps.
+
+#+NAME: envoy filters
+#+BEGIN_SRC yaml :tangle /ssh:learning:~/envoy/envoy.yaml :comments no
+
+  filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        config:
+          codec_type: auto
+          stat_prefix: ingress_http
+          route_config:
+            name: local_route
+            virtual_hosts:
+            - name: backend
+              domains:
+                - "learning.sharing.io"
+              routes:
+              - match:
+                  prefix: "/"
+                route:
+                  cluster: targetCluster
+          http_filters:
+          - name: envoy.router
+#+END_SRC
+
+we are using a built-in filter , the http_connection_manager.  You can also write and configure your own.
+
+* Clusters
+#+BEGIN_SRC yaml :tangle /ssh:learning:~/envoy/envoy.yaml :comments no
+  clusters:
+  - name: targetCluster
+    connect_timeout: 0.25s
+    type: STRICT_DNS
+    dns_lookup_family: V4_ONLY
+    lb_policy: ROUND_ROBIN
+    hosts: [
+      { socket_address: { address: 0.0.0.0, port: 8000 } }
+    ]
+#+END_SRC

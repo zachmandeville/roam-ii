@@ -1,0 +1,3 @@
+#+title: openAPI
+
+A specification that creates a standard, language-agnostic interface to RESTful API's, which allows for easy document generation for an API.

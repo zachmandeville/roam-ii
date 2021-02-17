@@ -1,0 +1,8 @@
+#+title: service mesh explained
+
+Simple medium article service mesh in plain english
+[[https://medium.com/swlh/service-mesh-explained-in-plain-english-8e5505f74ead][link]]
+
+----
+
+[[file:20210216102259-envoy_proxy.org][Envoy Proxy]]

@@ -1,0 +1,4 @@
+#+title: gRPC
+
+
+google Remote Procedure Call.  RPC is one of the two primary models of API design (the other being REST).  this is the google evolution of it.

@@ -1,0 +1,12 @@
+#+title: tramp fixes
+
+Tramp is a way to run code on remote machines.  It's used in org-mode shell blocks when you set the dir to a remote dir.
+
+I found it really slow, until I disabled projectile-mode in y file.  Then it worked great!
+
+I like projectile-mode though, I wonder if there's other ways to speed it up?
+
+
+----
+
+[[file:20210217151540-emacs.org][emacs]] [[file:20210217151559-org_mode.org][org-mode]]

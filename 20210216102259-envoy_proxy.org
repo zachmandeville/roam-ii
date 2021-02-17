@@ -1,0 +1,7 @@
+#+title: Envoy Proxy
+
+A proxy for edge and service proxy, designed for cloud-native applications.
+
+The messaging service between all your various microservices in a distributed application.  Adds an abstracted, easier-to-reason-about observability to the entire application, and one place to add resilience, authorization, and more.
+
+[[https://envoyproxy.io][envoy homepage]]

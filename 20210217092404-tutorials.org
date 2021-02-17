@@ -1,0 +1,3 @@
+#+title: Tutorials
+
+Tutorials I've used to better learn technology  Not all of them are good, but comments are given in the tutorial page.
