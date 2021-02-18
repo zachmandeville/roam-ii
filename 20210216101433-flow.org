@@ -4,19 +4,25 @@ My current flow, a big todo of needs and such
 
 * Projects
 ** Better Understand envoy
-*** TODO Compile good set of resources
+*** DONE Compile good set of resources
 :LOGBOOK:
-CLOCK: [2021-02-16 Tue 14:38]
+CLOCK: [2021-02-16 Tue 14:38]--[2021-02-16 Tue 15:03] =>  0:25
 CLOCK: [2021-02-16 Tue 12:31]--[2021-02-16 Tue 12:56] =>  0:25
 CLOCK: [2021-02-16 Tue 11:06]--[2021-02-16 Tue 11:31] =>  0:25
 CLOCK: [2021-02-16 Tue 10:35]--[2021-02-16 Tue 11:00] =>  0:25
 :END:
-*** TODO setup k8s cluster for practicing with envoy
-*** TODO set up envoy using getting started guide
+*** DONE setup k8s cluster for practicing with envoy
+*** DONE set up envoy using getting started guide
 ** NCW
-*** TODO Attend Contribex Meeting
+*** DONE Attend Contribex Meeting
 SCHEDULED: <2021-02-16 Tue 13:00>
 
+*** TODO See practicality of adding tooltips
+The intention is to be able to add definitions to an org file, these definitions then give a handy short summary of the term with maybe an additional link someone can follow.  This makes us able ot more concisely write our articles.
+
+Initial pass would be to have a ~[def:]~  style link that includes word and longer definition all inline.  Second pass would be to reference a ~glossary.org~ within this repo where that word is defined and use that instead.  This is preferred, as we can define once and have multiple links to that definition.
+
+I am going to work on the tufte.el file as it is the simplest written and I think I can add to it easy enough.
 *** TODO Write full, useful article for session 01
 *** TODO Style session 01 into a beautiful, easy to parse export
 *** TODO capture changes needed in org file for this export

@@ -1,0 +1,77 @@
+#+title: org tufte export
+
+
+Tufte CSS is a slighly overplayed sytle of making easy to parse HTML.  Its main feature is having footnotes and margin notes throughout.
+
+I like these, and want to use the initial export to get the right html which we can then style a bit better using custom CSS.
+
+*  ox-tufte
+[[https://github.com/dakrone/ox-tufte]]
+
+This is the package for our export, made by a Clojure legend incidentally!
+** DONE Add it to our packages.el
+** DONE Add a use-package! in our config.org
+** DONE Find where the code is written
+:LOGBOOK:
+CLOCK: [2021-02-18 Thu 10:02]--[2021-02-18 Thu 10:14] =>  0:12
+:END:
+[[file:~/humacs/doom-emacs/.local/straight/repos/ox-tufte/ox-tufte.el::defun org-tufte-maybe-def-link (link desc info][new function now defined in ox-tufte.el]]
+** DONE Add a def link function, with same body as margin notes function
+** DONE extend org-export settings to work better with tufte style
+:LOGBOOK:
+CLOCK: [2021-02-18 Thu 10:15]--[2021-02-18 Thu 10:40] =>  0:25
+:END:
+this will be just better in general, making a nice readable center column and such.
+** STRT Adjust def link function to add different class to def links
+Am doing this by defining a new custom link for dfn, so you can add a definition liek so ~[dfn:term][text]~  Ideally, then, on export, we would grab the definition of the term from
+a stated glossary and put that into a tooltip on hover.
+
+This is my current scratch to do this, using custom org links and org-ql
+#+BEGIN_SRC elisp
+;;; org-dfn
+;;; set org links for definitions that point to a glossary in yr dir.
+(require 'ol)
+
+;;; Code:
+;;;
+(org-link-set-parameters "dfn"
+                         ;; :follow #'org-dfn-follow
+                         :export #'org-dfn-export)
+
+(defcustom org-man-command 'man
+  "The Emacs command to be used to display a man page."
+  :group 'org-link)
+
+;; (defun org-dfn-follow (path _)
+;;   "Visit the definition in definition"
+
+;;   )
+
+(defun org-defn-export (link description format _)
+  "Export a man page link from Org files."
+  (let ((path (format "http://man.he.net/?topic=%s&section=all" link))
+        (desc (or description link)))
+    (pcase format
+      (`html (format "<a target=\"_blank\" href=\"%s\">%s</a>" path desc))
+      (`latex (format "\\href{%s}{%s}" path desc))
+      (`texinfo (format "@uref{%s,%s}" path desc))
+      (`ascii (format "%s (%s)" desc path))
+      (t path))))
+
+(cdr (car(-filter (lambda (x) (string= (car x) "DESCRIPTION"))
+                  (car (org-ql-query
+                         :select '(org-entry-properties)
+                         :from "~/org/ncw/glossary.org"
+                         :where '(heading "Kubernetes"))))))
+
+
+
+
+
+
+#+END_SRC
+
+** Create basic, nicely readable CSS for exports that utilize margin notes
+** extend CSS to bring in tooltip functionality like my dev zines
+** investigate how to parse different org file within a function
+** for definition, find its heading in different org file, then include its body.
