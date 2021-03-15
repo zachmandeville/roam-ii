@@ -1,0 +1,27 @@
+#+title: go projects today
+
+when setting up a go project you no longe rneed to set your GOPATH env or keep the projects all i the go workspace.
+
+* d/l and enter proejct
+for example:
+#+BEGIN_SRC
+git clone https://github.com/simplesteph/protobuf-example-go
+#+END_SRC
+enter dir
+#+BEGIN_SRC
+cd protobuf-example-go
+#+END_SRC
+* init go module
+#+BEGIN_SRC
+go mod init protobuf-example-go
+#+END_SRC
+
+this will create a go.mod in the dir that has all the admin stuff taken care of for dependency managemnt and such.
+* run program
+yr good to go!
+#+BEGIN_SRC shell
+go run main.go
+#+END_SRC
+
+----
+[[file:20210226155052-golang.org][golang]]

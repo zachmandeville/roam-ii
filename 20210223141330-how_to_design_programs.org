@@ -1,0 +1,13 @@
+#+title: HTDP
+
+How to design programso
+
+#+BEGIN_QUOTE
+Design one function per task. Fromuate auxillary function definitions for every
+dependency between quantities in the problem.
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+design one template per data defintion. Formulate auxillary function definitions
+when one data definition points  to another data definition.
+#+END_QUOTE

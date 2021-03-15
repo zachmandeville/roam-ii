@@ -1,0 +1,9 @@
+#+title: Go Questions
+
+* ANSWERED Interfaces and default parameters
+There is a function I define for a server interface that says it needs a stream, but I don't pass a stream to it.  Seems to be creating it by default.
+Why is it called with this arg?  Is it that it's inheriting it from the interface, or is it how it's defined in the signature?
+* For loops
+You don't need to have a value givent o them?  aM seeing the for loop with the iteration defined /within/ the loop.  This seems strange to me!
+* Responses versus return values
+In the client streaming it only returns an error, but it is sending a response each time.  not sure how that isn't a return value.  but this feels just non-functional to me.

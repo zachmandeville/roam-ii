@@ -1,0 +1,54 @@
+#+title: envoy gameplan
+
+This is the  rough plan for preparation on the envoy conformance project leading into the roadmap for 0.5
+* 0.25
+Summary: Feel confident with understanding the background and summary description of the SoW and the plan/edges of 0.5
+** Understand basic foundation of envoy
+*** Understand and feel comfortable iwth gRPC and protobuf
+*** Understand and feel comfortable with xDS
+*** Understand how to navigate and read the API documentation and source code
+** Understand our resources and how to navigate them
+*** relevant docs
+*** relevant Repos
+*** chat and getting help
+** Understand And be comfortable using the key terms used in the SoW
+*** Delta xDS
+*** xDS server implementations (control planes)
+*** ADS and gRPC
+"The xDS transport is limited to ADS and gRPC.""
+***  CDS and EDS protocols
+representative of the variety of protocols from a transport perspective).
+*** State-of-the-world and delta xDS transport protocols.
+*** CDS/EDS warming behavior.
+*** xds-relay
+*** xDS conformance
+*** Test Cases
+*** Test Target
+*** Test Runner
+*** Test Adapter
+*** Envoy coding and commenting style
+** Have solid understanding of confident and unconfident areas and roles
+- Contract is a mix of planning and development, or strategy and implementation
+  - Description of test cases can be written in anything, but require articulation of intended xDS behaviour.
+  - The actualtest cases shoudl be written in a particular syntax, based on research into what is best.
+  - The test framework architecture requires some understanding/planning of xDS and gRPC and how it shoudl be formatted.
+  - The actual test framework is written in python or go, and is almost a slim xDS client/server
+- What is our plan for growing out the team? How do we know if I'm spread too thin, how to maintain focus?
+- There is only one timeframe given (the timeboxed bringing up to understanding at the start).  What is assumed timeline for 0.5?
+* 0.5
+** Milestones & deliverables
+*** Audit and refine existing xDS documentation with API shepherds.
+This will be a time boxed exercise, e.g. 1-2 weeks. Goal is to build contractor understanding of xDS and improve documentation.
+***  Detailed design document providing
+- architecture
+- test case format
+- test adapter protocol
+- implementation plans in the target language
+*** Initial framework and limited test cases for SotW xDS
+*** Delta xDS test runner support and respective test cases
+*** Test adapter for xds-relay.
+*** Validate test cases pass and work with xds-relay developers where bugs exist.
+*** Test cases added covering target behaviors for SotW/delta xDS.
+        This is when a full audit of the specification and corner cases will be performed.
+***    User facing documentation
+

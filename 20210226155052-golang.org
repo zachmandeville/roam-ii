@@ -1,0 +1,3 @@
+#+title: golang
+
+the go language.  in use throughout kubernetes and [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]

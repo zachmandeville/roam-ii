@@ -1,0 +1,6 @@
+#+title: how we migrated from nginx to envoy
+
+https://dropbox.tech/infrastructure/how-we-migrated-dropbox-from-nginx-to-envoy
+
+---
+[[file:20210217094935-grpc.org][gRPC]]  [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]

@@ -1,0 +1,13 @@
+#+title: Wish List
+
+
+When designing programs, tackling problems, maintain a wish list of function
+headers that must be designed to complete the program. Writing down complete
+function headers ensures that you can test the portions of the program that are
+finished, knowing that the other tests will fail. If your wishlist is empty,
+then you should have a complete program where every function is tested and
+passing all tests.
+
+----
+
+- tags :: [[file:20210223141330-how_to_design_programs.org][HTDP]]

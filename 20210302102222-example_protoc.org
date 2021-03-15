@@ -1,0 +1,56 @@
+#+title: example protoc for gRPC
+
+in short it is, from the root of yr project:
+#+BEGIN_SRC shell
+protoc $PATH/TO/PROTOFILE --go_out=plugins=grpc:.
+#+END_SRC
+
+* Deets
+protoc is the cli for creating code from proto files.
+
+for working with grpc, let's say i have a dir structure like so
+
+#+BEGIN_SRC shell
+tree ~/go/src/git.sr.ht/~zim/grpc-go-course
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+/Users/zz/go/src/git.sr.ht/~zim/grpc-go-course
+├── calculator
+└── greet
+    └── greetpb
+        └── greet.proto
+
+3 directories, 1 file
+#+end_example
+
+From the root of this dir, if I want to generate code from our greetpb/greet.proto file, I would run
+
+#+BEGIN_SRC shell :dir ~/go/src/git.sr.ht/~zim/grpc-go-course/
+protoc greet/greetpb/greet.proto --go_out=plugins=grpc:.
+#+END_SRC
+
+And my tree is now like so:
+
+#+BEGIN_SRC shell
+tree ~/go/src/git.sr.ht/~zim/grpc-go-course
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+/Users/zz/go/src/git.sr.ht/~zim/grpc-go-course
+├── calculator
+└── greet
+    └── greetpb
+        ├── greet.pb.go
+        └── greet.proto
+
+3 directories, 2 files
+#+end_example
+
+
+as you see, go code has been generated within the greet/greetpb dir
+
+----
+[[file:20210225163355-protocol_buffers.org][protocol buffers]] [[file:20210217094935-grpc.org][gRPC]]

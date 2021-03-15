@@ -1,0 +1,9 @@
+#+title: grpc error codes
+
+With grpc, there are just a few error codes.
+
+if you need additional info on top of the error code, there is metadata you can send in the context.
+
+https://grpc.io/docs/guides/error/
+
+this site is also recommended: https://avi.im/grpc-errors/

@@ -1,0 +1,18 @@
+#+title: Proto Buffers Introduction
+
+Course I am taking on udemy:
+ https://www.udemy.com/course/protocol-buffers/learn/lecture/9924626#overview
+
+
+Begins with the evolution of data:
+csv -> relational tables -> json -> protocol buffers.
+
+csv is easy to read, but hard to use with complex data (even just data with commas)
+
+relational tables are well-typed and can handle complex relations, but the definition of data is specific to the db and hard to transmit data across the network to other db's with their own data definition.
+
+json is great, able to handle complex data across the network,b ut not typed with casual schemas and as the data gets more involved the json payload is huge.
+
+proto buffers are easy to read, while still being machine readable. data is fully typed and compressed automatically (it can be compiled by a machine).  Documentation can be embedded in the schema, and the data can be read across any language, and can evolve easily.
+
+disadvantage is that you can't open the data with a text editor. it is compressed binary.

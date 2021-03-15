@@ -1,0 +1,7 @@
+#+title: gogo protobuf
+
+alternative to the google protobuf that is built for speed and usability
+
+more info:
+https://github.com/gogo/protobuf
+https://atodorov.me/2021/02/27/why-you-should-take-a-look-at-nomad-before-jumping-on-kubernetes/#primitives

@@ -1,0 +1,8 @@
+#+title: server streaming API
+
+type of API made possible with [[file:20210217094935-grpc.org][gRPC]]
+
+client sends one request, server sends many responses back over time.
+
+Well suited for when the server needs to send big data (e.g. big data)
+Also useful for when server needs to "push" new info (like chat, or a live feed)

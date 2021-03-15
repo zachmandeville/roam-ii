@@ -1,0 +1,19 @@
+#+title: protocol buffers
+
+a data exchange format (compare it to json or csv).  It is fully typed, read by any language, and easy to read.
+you create it by making a proto file that has your api contract define.  this is compiled into a proto3 object which is then encoded and decoded across the network
+
+a basic proto buffer would look like
+
+#+BEGIN_SRC c
+syntax = 'proto3';
+
+message getMessage {
+  string  greeting id = 1;
+  int32   time     id = 2;
+  boolean cool     id = 3;
+}
+#+END_SRC
+
+
+defautl values should always be handled with care in yr code.

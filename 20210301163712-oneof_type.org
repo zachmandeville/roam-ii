@@ -1,0 +1,14 @@
+#+title: oneof type
+
+you can create a type in [[file:20210225163355-protocol_buffers.org][protocol buffers]] of ~oneof~ which means "it will be one of these things"`:
+
+#+BEGIN_SRC c
+message example {
+  oneof my_thing {
+   string name = 1;
+   boolean bool = 2
+  }
+}
+#+END_SRC
+
+be aware that you cannot repeat oneof's and they can be hard to evolve, so use them only where you really need to.

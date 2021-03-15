@@ -1,0 +1,15 @@
+#+title: proto repeated fields
+
+
+in your [[file:20210225163355-protocol_buffers.org][protocol buffers]] definition, you can set a repeated field, which is like an array in json.
+
+#+BEGIN_SRC c
+syntax = 'proto3';
+
+message Father {
+  string name = 1;
+  repeated string children = 2;
+}
+#+END_SRC
+
+this def would let you put down multiple child strings for a Father type.

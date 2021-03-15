@@ -1,0 +1,7 @@
+#+title: Unary API
+
+Classic model of API of request and response.
+
+Great for when data is small or needs are simple.  Start with the unary api.
+
+in [[file:20210217094935-grpc.org][gRPC]], Unary Calls are defined with [[file:20210225163355-protocol_buffers.org][protocol buffers]]

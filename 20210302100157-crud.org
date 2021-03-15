@@ -1,0 +1,6 @@
+#+title: CRUD
+
+model for api design for rest api's.  stands for CREATE READ UPDATE DELETE, and maps to the requests GET POST PUT DELETE.
+
+----
+[[file:20210302094703-internet_fundamentals.org][internet fundamentals]]

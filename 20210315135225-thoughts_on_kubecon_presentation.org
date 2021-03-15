@@ -1,0 +1,18 @@
+#+title: Thoughts on Kubecon Presentation
+
+* Our presentation
+[[https://kccnceu2021.sched.com/event/iE77/contributing-to-kubernetes-conformance-coverage-zach-mandeville-caleb-woodbine-iicoop-httpsiicoop][kubecon schedule page]]
+* Current Presentation
+
+* Script
+* Feedback
+** Should we show the creation of a box on pair?
+** Does the sonobuoy section need to be live?
+what benefit is there to showing the code execution?
+
+** If we aren't showing the db live,  is it better to use a fake endpoint and increased coverage?
+** What is the core messaage of the presentation?
+If it' a broad survey, then we can breeze quickly through everything.
+If it is a: "this is how we test", then let's do more hands-on?
+
+**

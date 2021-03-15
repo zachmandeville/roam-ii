@@ -5,3 +5,6 @@ A proxy for edge and service proxy, designed for cloud-native applications.
 The messaging service between all your various microservices in a distributed application.  Adds an abstracted, easier-to-reason-about observability to the entire application, and one place to add resilience, authorization, and more.
 
 [[https://envoyproxy.io][envoy homepage]]
+
+* Thoughts on envoy
+It is a lot more low-level than I initially realized, which makes sense for why it needs conformance.  It is a thing used by end-user applications like [[file:20210222102522-istio.org][Istio]] to enable your service mesh, and I wonder how much people are writing envoy cluster definitions directly when deploying their cluster, or whether this writing is done by developers builidng out end-user services.

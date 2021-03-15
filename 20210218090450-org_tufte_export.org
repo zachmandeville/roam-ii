@@ -15,7 +15,6 @@ This is the package for our export, made by a Clojure legend incidentally!
 :LOGBOOK:
 CLOCK: [2021-02-18 Thu 10:02]--[2021-02-18 Thu 10:14] =>  0:12
 :END:
-[[file:~/humacs/doom-emacs/.local/straight/repos/ox-tufte/ox-tufte.el::defun org-tufte-maybe-def-link (link desc info][new function now defined in ox-tufte.el]]
 ** DONE Add a def link function, with same body as margin notes function
 ** DONE extend org-export settings to work better with tufte style
 :LOGBOOK:
@@ -26,7 +25,9 @@ this will be just better in general, making a nice readable center column and su
 Am doing this by defining a new custom link for dfn, so you can add a definition liek so ~[dfn:term][text]~  Ideally, then, on export, we would grab the definition of the term from
 a stated glossary and put that into a tooltip on hover.
 
-This is my current scratch to do this, using custom org links and org-ql
+This is my current scratch to do this, using custom org links and org-ql.  I think I'll move th is into a true blue package in local.
+
+
 #+BEGIN_SRC elisp
 ;;; org-dfn
 ;;; set org links for definitions that point to a glossary in yr dir.

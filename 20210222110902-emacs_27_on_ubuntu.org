@@ -1,0 +1,15 @@
+#+title: emacs 27 on ubuntu
+
+
+* add kellyk reponsitory
+#+BEGIN_EXAMPLE shell
+sudo add-apt-repository ppa:kelleyk/emacs
+#+END_EXAMPLE
+* Update
+#+BEGIN_EXAMPLE shell
+sudo apt update
+#+END_EXAMPLE
+* Install
+#+BEGIN_EXAMPLE
+sudo apt install emacs27
+#+END_EXAMPLE

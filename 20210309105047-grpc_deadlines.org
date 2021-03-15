@@ -1,0 +1,6 @@
+#+title: grpc deadlines
+
+
+in [[file:20210217094935-grpc.org][gRPC]], deadlines let a client specify how long they're willing to wait for a response.
+if it exceeds, it returns an error of DEADLINE_EXCEEDED.
+it is recommended that you set a deadline for all client calls.

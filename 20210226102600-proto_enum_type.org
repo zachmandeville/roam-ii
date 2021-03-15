@@ -1,0 +1,9 @@
+#+title: proto enum type
+
+enum type is when you have an enumeration of values, e.g. you know all possible values in advance.
+
+the first value of an enum type is the default value.
+Enum must start wtih the tag 0.
+
+----
+[[file:20210225163355-protocol_buffers.org][protocol buffers]]

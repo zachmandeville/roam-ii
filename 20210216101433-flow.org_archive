@@ -1,0 +1,49 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/zz/roam/20210216101433-flow.org
+
+
+* Get a grasp on Istio :ARCHIVE:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-02-25 Thu 09:30
+  :ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+  :ARCHIVE_OLPATH: Projects
+  :ARCHIVE_CATEGORY: 20210216101433-flow
+  :END:
+** DONE Start baremetal machine on packet
+** DONE [100%] Get humacs and our tools setup on bare metal
+- [X] emacs
+- [X] humacs
+- [X] minikube
+** DONE install [[file:20210222102522-istio.org][Istio]] following its homepage intstructions
+
+* DONE Understand this warning when running protoc
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-11 Thu 08:50
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Inbox
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+#+BEGIN_QUOTE
+2021/03/01 09:29:04 WARNING: Missing 'go_package' option in "simple/simple.proto",
+please specify it with the full Go package path as
+a future release of protoc-gen-go will require this be specified.
+See https://developers.google.com/protocol-buffers/docs/reference/go-generated#package for more information.
+#+END_QUOTE
+
+
+
+* DONE Get a grasp of gRPC and protobuffers
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-11 Thu 08:53
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+** DONE Complete proto buffer course on udemy
+[[file:20210225162351-proto_buffers_introduction.org][Proto Buffers Introduction]]
+** DONE Complete gRPC course
+** DONE WRite out blog post of my findings

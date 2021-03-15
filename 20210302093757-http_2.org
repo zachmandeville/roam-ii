@@ -1,0 +1,29 @@
+#+title: HTTP/2
+
+* What is http/1?
+- released in 1997
+- opens a new TCP connection at each request
+- does not compress headers (all plaintext)
+- works with request/response (no server push).
+- originally composed of two commands:
+  - GET
+  - POST
+- headers are sent at every request.
+- as sites get more complex with more assets, http/1 will slow down due to amount of requests and size of requests required.
+
+* What is http/2?
+https://http2.github.io/
+- update of the http protocol ot address pitfals outlined above.
+- made by google
+- supports multiplexing
+  - client and server can push messages in parallel over same tcp connection
+  - this reduces latency
+- supports server push
+  - can push streams (multiple messages) for one request from the client
+- supports header compressions
+- http/2 is binary
+- Secure. Soon, by default , ssl is required
+
+
+----
+- [[file:20210302094703-internet_fundamentals.org][internet fundamentals]]

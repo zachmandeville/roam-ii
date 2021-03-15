@@ -1,0 +1,18 @@
+#+title: protobuf field tags
+
+The most important part of your .proto specification for the machine to pick up.
+
+e.g. with a definition of:
+#+BEGIN_SRC c
+message example {
+ string awesome = 1;
+}
+#+END_SRC
+
+the field tag is the 1.  the field name, ~awesome~, is useful for the programmer but the tag is what's important for protobuf.
+
+you cannot use the field tags of 19000 to 199999, but gettint there would mean you have 18999 fields in yr def...which is prolly too many?
+
+----
+
+[[file:20210225163355-protocol_buffers.org][protocol buffers]]
