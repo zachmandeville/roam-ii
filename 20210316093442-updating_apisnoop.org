@@ -1,0 +1,16 @@
+#+title: updating apisnoop
+
+** Snoopdb
+When we update snoopdb, and have pushed a new official image, we need to:
+- update the [[https://github.com/cncf/apisnoop/blob/8d072ca821f088a0d32f304eb86fc30b51cb2f15/charts/snoopdb/Chart.yaml#L23][helm chart]] for snoopdb
+- update the image referenced in our [[https://github.com/cncf/apisnoop/blob/8d072ca821f088a0d32f304eb86fc30b51cb2f15/cloudbuild.yaml#L28][cloudbuild.yaml]]
+
+you use the latest image that can be found in our [[https://console.cloud.google.com/gcr/images/k8s-staging-apisnoop/GLOBAL/snoopdb?project=k8s-staging-apisnoop&folder&organizationId&gcrImageListsize=30][gcloud container registry]]
+** Auditlogger
+When we update snoopdb, and have pushed a new official image, we need to:
+- update the [[https://github.com/cncf/apisnoop/blob/8d072ca821f088a0d32f304eb86fc30b51cb2f15/charts/auditlogger/Chart.yaml#L23][helm chart]] for auditlogger
+
+- you use the latest image that can be found in our [[ https://console.cloud.google.com/gcr/images/k8s-staging-apisnoop/GLOBAL/auditlogger?project=k8s-staging-apisnoop&folder&organizationId&gcrImageListsize=30][gcloud container registry]]
+
+----
+- tags :: [[file:20210316095530-apisnoop.org][ APISnoop]]

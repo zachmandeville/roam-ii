@@ -1,0 +1,37 @@
+#+title: getting ob-tmate working
+
+These are the steps I used to get ob-tmate working
+
+* Test it out
+#+begin_src tmate :session con
+echo "hi"
+#+end_src
+* Create a session
+you do this by adding ~:session con~
+* Target a window in the session
+#+begin_src tmate :session con:fun-window
+echo "this still fun"
+#+end_src
+
+#+begin_src tmux :session caleb:cool
+echo "fun"
+#+end_src
+
+#+begin_src tmux :session caleb:cool
+echo "this is still fun"
+#+end_src
+
+#+begin_src tmux :session caleb:zach
+echo "this is zach's window"
+#+end_src
+
+#+begin_src tmux :session caleb:cool
+echo "caleb is still cool"
+#+end_src
+#+begin_src tmux :session caleb:new.bottom
+echo "this works"
+#+end_src
+#+RESULTS:
+#+begin_example
+/Users/zz/roam
+#+end_example

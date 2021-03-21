@@ -1,0 +1,10 @@
+#+title: Chris Aniszczyk
+
+Part of CNCF
+[[http://www.aniszczyk.org/][Website]]
+[[mailto:caniszczyk@linuxfoundation.org][email]]
+
+From his about page
+#+begin_quote
+Hi, my name is Chris Aniszczyk. I’m an open source executive and engineer by trade with a passion for building a better world through open collaboration. I’m currently a Vice President at the Linux Foundation focused on developer relations and running the Open Container Initiative (OCI) / Cloud Native Computing Foundation (CNCF). I’m also a Partner at Capital Factory where I focus on mentoring, advising and investing in open source and infrastructure focused startups.
+#+end_quote

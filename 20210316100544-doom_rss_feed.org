@@ -1,0 +1,16 @@
+#+title: doom RSS Feed
+
+This is how to set up an RSS feed for doom emacs!
+
+* turn on RSS in our init.el
+we'll uncomment rss with the +org plugin, so that we can manage the feed in an easy to read org file.
+* create an elfeed.org file in our our directory
+I am making one in our[[https://github.com/ii/org][ ii/org repo]]
+
+* Useful keybindings
+You can move through the list with vim keybindings
+=RET= will open up an article
+if you select an article with v (or a group of articles) then you can hit ~U~ to mark them as unread or ~u~ to mark them as read.
+~s~ will bring up the search filter
+---
+- tags :: [[file:20210217151540-emacs.org][emacs]]

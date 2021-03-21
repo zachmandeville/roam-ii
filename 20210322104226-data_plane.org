@@ -1,0 +1,30 @@
+#+title: Data Plane
+
+Term used in relation to [[file:20210216153039-service_mesh.org][service mesh]]es and routing. In a service mesh, the data
+plane is responsible for observing, translating, and forwarding every network
+packet that flows through a network instance.
+
+As [[file:20210216103855-matt_klein.org][Matt Klein]] writes in his article ([[file:20210216124707-data_plane_versus_control_plane.org][Data Plane Versus Control Plane]]):
+
+#+BEGIN_QUOTE
+Said another way, the data plane is responsible for conditionally translating,
+forwarding, and observing every network packet that flows to and from a service
+instance.
+#+END_QUOTE
+
+* Data Plane Responsibilities
+** Service Discovery
+What services are available upstream and downstream?
+** Health Checking
+What is the status of these services? Can packets be forwarded to them effectively?
+** Routing
+Given an endpoint (like ~/fun~), what service should handle the request from that endpoint, and then it would forward the data to this service
+** Load Balancing
+Once the service has been decided through routing, which /instance/ of the
+service should get this data? Load balancing distributes requests across all
+instances of a service based on a set of rules to ensure highest availability
+and speed.
+** Authentication and Authorization
+Who ss the entity sending the request, are they authorized to use the service this request woudl be routed to? What information are they able to see?  In the article this is said as "Can the caller be cryptographically attested?"
+** Observability
+What is happening?  Who is the caller, what is being sent, what are the services, which is the instance receiving the request, what is the time taken, etc.  Used to understand the distributed network flow for debugging and improvement.

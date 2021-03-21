@@ -1,0 +1,6 @@
+#+title: get root level of git repo
+
+git rev-parse --show-toplevel)
+
+----
+- tags :: [[file:20210318134402-til.org][til]]

@@ -1,0 +1,3 @@
+#+title: API Shepherds
+
+The people involved with [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] and the [[file:20210322102245-ecp.org][ECP]] who are the guiding architects of the work

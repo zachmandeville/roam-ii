@@ -1,0 +1,12 @@
+#+title: envoy contacts
+
+People we are working with, with [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]
+
+[[file:20210316132249-chris_aniszczyk.org][Chris Aniszczyk]]
+[[file:20210316132831-mark_roth.org][Mark Roth]]
+[[file:20210216103855-matt_klein.org][Matt Klein]]
+[[file:20210316133212-harvey_tuch.org][Harvey Tuch]]
+[[file:20210316133603-adi_peleg.org][Adi Peleg]]
+
+---
+- tags :: [[file:20210311085010-envoy_gameplan.org][envoy gameplan]]

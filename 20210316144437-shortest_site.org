@@ -1,0 +1,6 @@
+#+title: shortest site
+
+This is valid html.
+#+begin_src
+<!doctype html><html lang='en'><head><title>site</title></head><body><h1>HI</h1></body></html>
+#+end_src

@@ -1,0 +1,4 @@
+#+title: Control Plane
+
+A Term used in routing and service meshes. It refers to all functions and
+processes that determine how packets should be forwarded through the network.

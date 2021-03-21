@@ -1,0 +1,13 @@
+1615931528.902704 Connecting to ssh.tmate.io...
+1615931530.108009 Note: clear your terminal before sharing readonly access
+1615931530.108186 web session read only: https://tmate.io/t/ro-pfb6ezNS9gCAuM8k55xkp3MhN
+1615931530.108279 ssh session read only: ssh ro-pfb6ezNS9gCAuM8k55xkp3MhN@sgp1.tmate.io
+1615931530.108362 web session: https://tmate.io/t/kc58c9Qky2GD6JMWC9ynLHYwk
+1615931530.108433 ssh session: ssh kc58c9Qky2GD6JMWC9ynLHYwk@sgp1.tmate.io
+1615978046.657678 Error reading from channel: Socket error: Connection reset by peer
+1615978047.219631 Reconnecting... (Error reading from channel: Socket error: Connection reset by peer)
+1615978057.942904 Reconnected
+1616007613.575337 Error reading from channel: Socket error: Connection reset by peer
+1616007613.578519 Reconnecting... (Error reading from channel: Socket error: Connection reset by peer)
+1616007616.781226 Reconnected
+1616014750.293667 Session closed

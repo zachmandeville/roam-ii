@@ -2,14 +2,26 @@
 
 My current flow, a big todo of needs and such
 * Inbox
+** in kubecon presentation kind.sh, run kind script from absolute path of apisnoop
+right now it is relative, make a onelineer to find the root of the git repo we are in and run the scripts from there.
 * Projects
+** Comfy Computer
+*** Set up an RSS feed with org
+check out [[file:20210316100544-doom_rss_feed.org][doom RSS Feed]]
 ** Envoy Conformance
-*** STRT Setup basic gameplan for rest of march
-*** Meet with Riaan to discuss gameplan
+*** DONE Setup basic gameplan for rest of march
+*** DONE Meet with Riaan to discuss gameplan
+*** DONE Create an envoy-conformance repo for tracking tickets
+https://github.com/ii/envoy-conformance
+*** DONE Meet with Riaan and HH to discuss the [[file:20210311085010-envoy_gameplan.org][envoy gameplan]]
+*** TODO Add Agenda for conformance check,-in
+*** Have property picked for first exercise
+This should be one that is well in the scope of the xDS work
+*** TODO Have a check in with conformance team
+SCHEDULED: <2021-03-23 Tue 10:30>
 *** Test Case written for xDS
-**** Parse and understand the docs
 ** APISnoop low-maintenance
-*** Webapp uses ineligible-endpoints.yaml to gather its endpoints
+*** TODO Webapp uses ineligible-endpoints.yaml to gather its endpoints
 *** ineligible endpoints removed from database
 *** releases on web app update near-automatically
 *** releases on db update near-automatically
@@ -26,13 +38,20 @@ Initial pass would be to have a ~[def:]~  style link that includes word and long
 I am going to work on the tufte.el file as it is the simplest written and I think I can add to it easy enough.
 it is hard to do as a global package, but could be done as a file local variable i do think
 *** DONE incorporate tooltip into ncw repo
+*** DONE Style session 01 into a beautiful, easy to parse export
 *** TODO Write full, useful article for session 01
 [[file:~/org/ncw/session-01.org][Session 01]]
-*** TODO Style session 01 into a beautiful, easy to parse export
-*** TODO capture changes needed in org file for this export
-*** TODO export into reveal presentation
-*** TODO Document changes needed to get working reveal presentation
-*** TODO explore having both exports work from one file, else find alternative
+*** capture changes needed in org file for this export
+*** export into reveal presentation
+*** Document changes needed to get working reveal presentation
+*** explore having both exports work from one file, else find alternative
 ** Kubecon Performance
-*** STRT Watch the last con
-*** Go through presentation with caleb
+*** DONE Watch the last con
+*** STRT Go through presentation on computer, ensuring i can run each code block
+The presentation is located in the[[file:~/Projects/apisnoop/][ APISnoop repo]]
+*** Determine what we want to update and adjust from the current slides
+*** divide speaking slides between caleb and myself
+*** go through new presentation with Caleb, make sure we ahve it tight
+*** Record presentation
+*** Review with team
+*** Submit Presentation

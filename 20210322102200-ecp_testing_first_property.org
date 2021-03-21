@@ -1,0 +1,12 @@
+#+title: ECP: Testing First Property
+
+Task: pick a suitable and develop test cases for it.
+
+* TODO Pick Property
+* Describe Property
+* Write First Test Case
+* Confirm Test Case with [[file:20210322102447-api_shepherds.org][API Shepherds]]
+
+
+----
+- tags :: [[file:20210322102245-ecp.org][ECP]]   [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]
