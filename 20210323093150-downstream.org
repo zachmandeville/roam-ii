@@ -1,0 +1,8 @@
+#+title: Downstream
+
+host->envoy.
+
+A downstream hosts /connects to/ Envoy, sends requests, and receives responses.
+
+---
+- tags :: [[file:20210323093001-envoy_terminology.org][envoy terminology]]

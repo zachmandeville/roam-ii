@@ -1,0 +1,8 @@
+#+title: runtime configuration
+
+Out of band realtime configuration system run alongside Envoy. (q: is this what enables, or is referred to, in the dynamic configuration of envoy done by systems like [[file:20210222102522-istio.org][Istio]]?)
+
+Configs can be alterted without having to restart envoy or change its primary config.
+
+----
+[[file:20210323093001-envoy_terminology.org][envoy terminology]]

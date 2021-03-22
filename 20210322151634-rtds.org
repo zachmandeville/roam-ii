@@ -1,0 +1,9 @@
+#+title: RTDS
+
+Runtime Discovery Service. Part of [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] [[file:20210322140209-xds_api.org][xDS API]].
+
+From the docs:
+
+One or more runtime layers may be specified and delivered by specifying a rtds_layer.
+
+[[https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/runtime/v3/rtds.proto#envoy-v3-api-msg-service-runtime-v3-runtime][docs]]

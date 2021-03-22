@@ -2,8 +2,6 @@
 
 My current flow, a big todo of needs and such
 * Inbox
-** in kubecon presentation kind.sh, run kind script from absolute path of apisnoop
-right now it is relative, make a onelineer to find the root of the git repo we are in and run the scripts from there.
 * Projects
 ** Comfy Computer
 *** Set up an RSS feed with org
@@ -14,9 +12,10 @@ check out [[file:20210316100544-doom_rss_feed.org][doom RSS Feed]]
 *** DONE Create an envoy-conformance repo for tracking tickets
 https://github.com/ii/envoy-conformance
 *** DONE Meet with Riaan and HH to discuss the [[file:20210311085010-envoy_gameplan.org][envoy gameplan]]
-*** TODO Add Agenda for conformance check,-in
-*** Have property picked for first exercise
+*** DONE Add Agenda for conformance check,-in
+*** STRT Have property picked for first exercise
 This should be one that is well in the scope of the xDS work
+See
 *** TODO Have a check in with conformance team
 SCHEDULED: <2021-03-23 Tue 10:30>
 *** Test Case written for xDS
@@ -55,3 +54,5 @@ The presentation is located in the[[file:~/Projects/apisnoop/][ APISnoop repo]]
 *** Record presentation
 *** Review with team
 *** Submit Presentation
+*** in kubecon presentation kind.sh, run kind script from absolute path of apisnoop
+right now it is relative, make a onelineer to find the root of the git repo we are in and run the scripts from there.

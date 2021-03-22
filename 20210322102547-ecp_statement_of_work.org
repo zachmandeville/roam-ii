@@ -22,20 +22,20 @@ https://blog.envoyproxy.io/the-universal-data-plane-api-d15cec7a.
 xDS describes a family of protocols for delivering Envoy configuration and
 reporting status to/from management servers. For the purpose of this document,
 we will restrict xDS to only covering the [[file:20210322135444-pub_sub.org][pub-sub]] protocols used to deliver
-configuration to Envoy, specifically [[file:20210322140833-lds.org][LDS]], [[file:20210322140721-rds.org][RDS]], SRDS, VHDS, [[file:20210322140646-cds.org][CDS]], [[file:20210322141650-eds.org][EDS]], [[file:20210322140137-sds.org][SDS]], ECDS,
-RTDS. All these xDS protocols share a common transport protocol, in which the
+configuration to Envoy, specifically [[file:20210322140833-lds.org][LDS]], [[file:20210322140721-rds.org][RDS]], [[file:20210322144857-srds.org][SRDS]], [[file:20210322150319-vhds.org][VHDS]], [[file:20210322140646-cds.org][CDS]], [[file:20210322141650-eds.org][EDS]], [[file:20210322140137-sds.org][SDS]], [[file:20210322150834-ecds.org][ECDS]],
+[[file:20210322151634-rtds.org][RTDS]]. All these xDS protocols share a common transport protocol, in which the
 xDS client (Envoy or gRPC) subscribes to versioned resources over a gRPC stream
 from an xDS management server. The xDS protocol is described in full detail
-here.
+[[https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol][here]].
 
 We draw a distinction between the xDS transport protocol and data model below
-(the SoW focuses on transport protocol): The transport protocol describes how
-resources are generically subscribed to by the client and delivered by the
-server. This covers common concerns such as naming, versioning, lifetime, stream
-and connection management. The data model describes what resources describe,
-e.g. in the case of CDS, what a Cluster message looks like, what the semantics
-of its fields are, how a client manages updates of clusters, etc.
-
+(the SoW focuses on transport protocol):
+- The transport protocol describes how resources are generically subscribed to
+  by the client and delivered by the server. This covers common concerns such as
+  naming, versioning, lifetime, stream and connection management.
+- The data model describes what resources describe, e.g. in the case of CDS,
+  what a Cluster message looks like, what the semantics of its fields are, how a
+  client manages updates of clusters, etc.
 xDS is now the basis of an ecosystem of clients and servers. We estimate there
 are O(100) control planes that act as xDS management servers, ranging from
 control-plane-as-a-service offerings such as Traffic Director to enterprise
@@ -83,7 +83,6 @@ interface.
 We call the combination of test runner, test case syntax and adapter protocol
 the test framework. The combination of test framework and test cases constitute
 the test suite.
-
 
 
 * Version 0.5 (MVP)

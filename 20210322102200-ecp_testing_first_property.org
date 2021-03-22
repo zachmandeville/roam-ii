@@ -3,7 +3,18 @@
 Task: pick a suitable and develop test cases for it.
 
 * TODO Pick Property
-* Describe Property
+This should be one that fits our [[file:20210322102547-ecp_statement_of_work.org][ECP: Statement of Work]]
+** Scope
+- The xDS transport is limited to [[file:20210322142924-ads.org][ADS]] and [[file:20210217094935-grpc.org][gRPC]].
+- v3 [[file:20210322140209-xds_api.org][xDS API]] only.
+- Test cases need only cover [[file:20210322140646-cds.org][CDS]] and [[file:20210322141650-eds.org][EDS]] protocols (representative of the variety of protocols from a transport perspective).
+* Initial thoughts
+Is it good to just focus on a property of the transport protocol itself, and so something like 'version type'.  For example, a test case where a stream is broken and new stream starts, and the version_info should then be the last version from the previous stream.  Or to ensure that the ACK NACK exchange is working properly, that error details do not include the returned version but the previous version and that, when sending a new respponse following an error detail, it is a new version and not the previous X version.
+
+Here we are building basic test cases around the types in a basic discovery request and how the interactions in the request should occur.
+
+The other method is to focus on an api like CDS or EDS.  If we focused on EDS a basic test would be to validate the EDS health 2x2 matrix([[https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/service_discovery#on-eventually-consistent-service-discovery][docs]]), given a set of states then EDS should route appropraitely.
+
 * Write First Test Case
 * Confirm Test Case with [[file:20210322102447-api_shepherds.org][API Shepherds]]
 

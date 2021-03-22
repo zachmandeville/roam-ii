@@ -1,0 +1,14 @@
+#+title: cluster
+
+A group of logically similar [[file:20210323093244-upstream.org][Upstream]] hosts that [[file:20210216102259-envoy_proxy.org][Envoy]] connects to.
+
+The way envoy interacts with clusters is a good overview of its capability/api.
+
+Envoy discovers a member of a cluster through service discovery.
+
+Envoy optionally determines the health of a cluster through active health checking.
+
+Envoy determines which cluster member to route the request to through load balancing policy.
+
+----
+[[file:20210323093001-envoy_terminology.org][envoy terminology]]

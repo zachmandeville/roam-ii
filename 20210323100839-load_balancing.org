@@ -1,0 +1,9 @@
+#+title: load balancing
+
+A way to distribute traffic between multiple hosts within a single upstream cluster to effectively make use of available resources.
+
+Fully quote [[https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/overview#arch-overview-load-balancing][the docs]]:
+
+#+BEGIN_QUOTE
+Load balancing is a way of distributing traffic between multiple hosts within a single upstream cluster in order to effectively make use of available resources. There are many different ways of accomplishing this, so Envoy provides several different load balancing strategies. At a high level, we can break these strategies into two categories: global load balancing and distributed load balancing
+#+END_QUOTE

@@ -1,0 +1,8 @@
+#+title: Host
+
+An entity capable of network communication.  In the documentation, a host is a logical network application.  A physical machine could potentially hae multiple hosts, if each of the hosts can be independently addressed.
+
+Examples: servers, a mobile application
+
+---
+- tags :: [[file:20210323093001-envoy_terminology.org][envoy terminology]]
