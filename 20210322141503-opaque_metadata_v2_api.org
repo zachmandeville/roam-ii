@@ -1,0 +1,12 @@
+#+title: opaque metadata v2 api
+
+a quote i saw in the essay on the [[file:20210322135932-universal_data_plane_api.org][Universal Data Plane API]]
+
+#+BEGIN_QUOTE
+Opaque metadata has been added to various API responses, allowing for a large amount of extensibility. For example, metadata in an HTTP route, metadata attached to an upstream endpoint, and a custom load balancer can be used to build site specific label-based routing. Our goal is to make it easy to plug in rich functionality on top of the default OSS distribution. Look for more robust documentation on writing Envoy extensions in the future.
+#+END_QUOTE
+
+the api is designed for plugins, through use of the metadata.  This could be a good entrypoint for testing? Write it as a plugin for the api using the existing feature for it.
+
+----
+- tags::  [[file:20210322102245-ecp.org][ECP]] [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]

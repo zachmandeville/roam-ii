@@ -1,0 +1,3 @@
+#+title: Nelson
+
+A control plane that uses [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] under the hood, specidically is v1 api

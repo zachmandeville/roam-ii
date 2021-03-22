@@ -1,0 +1,6 @@
+#+title: SRDS
+
+Scoped Route Discovery Service.  Part of the [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] v2 [[file:20210322140209-xds_api.org][xDS API]].
+Like [[file:20210322140721-rds.org][RDS]], but you can set a scope configuration to provide a key to set which route table to look at.
+
+more details: https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_routing#route-scope

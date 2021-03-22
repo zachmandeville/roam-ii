@@ -1,0 +1,6 @@
+#+title: HDS
+
+Health Discovery Service.  Part of [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] v2 [[file:20210322140209-xds_api.org][xDS API]].
+
+allows for an envoy to become a member of a distributed health checking network.
+This allows for a central health checking service to use a set of envoys health checking endpoints and report their status back.  The big advantage is it avoids a situation where each envoy has to check every other envoy to get an accurate understanding of the current health.

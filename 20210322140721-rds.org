@@ -1,0 +1,5 @@
+#+title: RDS
+
+Route Discovery Service. Part of the [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] [[file:20210322135932-universal_data_plane_api.org][Universal Data Plane API]]
+
+Use this api to dynamically add/update HTTP route tables

@@ -1,0 +1,5 @@
+#+title: pub-sub
+
+short for "Publish Subscribe", a messaging pattern in software architecture.
+
+In this design, the publisher will publish messages without knowledge of which subscribers there are, if any. It groups the messages into various categories and leaves it at that.  The subscribers will subscribe to categories of messages unaware of the publishers and content, if there is any.  Subscribers will most often not subscribe to all published messages, but just a subset it gets through filtering.

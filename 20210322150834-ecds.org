@@ -1,0 +1,10 @@
+#+title: ECDS
+
+Extension Config Discovery Service.  Part of [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]'s [[file:20210322140209-xds_api.org][xDS API]].
+
+Very little documentation avialble, see:
+   https://www.envoyproxy.io/docs/envoy/latest/api-v3/service/extension/v3/config_discovery.proto.html?highlight=ecds
+
+
+   ---
+   - tags :: [[file:20210322151348-needs_documentation.org][Needs Documentation]]

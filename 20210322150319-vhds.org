@@ -1,0 +1,10 @@
+#+title: VHDS
+
+Virtual Host Discovery Service. Part of [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] v2 [[file:20210322140209-xds_api.org][xDS API]].
+
+optional API that is most useful for larger clusters. With [[file:20210322140721-rds.org][RDS]], all routes for a
+cluster are sent to every envoy instance. As the cluster scales up, this can
+cause performance issues mostly with dealing with virtual host configuration.
+Since not every virutal host will be needed on a request, the VHDS allows for a
+specific route configuration to be subscribed to and its set of virtual hosts to
+be sent.

@@ -1,0 +1,7 @@
+#+title: LDS
+
+Listener Discovery Service.  Part of the [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] [[file:20210322135932-universal_data_plane_api.org][Universal Data Plane API]]
+
+Use this api to dynamically add/update/remove entire listeners, including their filter stack.
+
+in the v2 API, the listener can define multiple, concurrent filter stacks that can be selected based on some rule (SNS or source/destination ip matching). A cleaner way to handle "original destination" routing, which was a requirment for Istio.

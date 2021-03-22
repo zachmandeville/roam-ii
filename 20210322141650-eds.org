@@ -1,0 +1,3 @@
+#+title: EDS
+
+Endpoint Discovery Service.  This is a replacement for [[file:20210322140137-sds.org][SDS]] mostly cos SDS is a terrible name. It also utilizes [[file:20210217094935-grpc.org][gRPC]]'s bidirectional streaming, to be able to send out load/health info back to the server.

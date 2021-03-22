@@ -1,0 +1,10 @@
+#+title: ADS
+
+Aggregated Discovery Service, part of the [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] [[file:20210322135932-universal_data_plane_api.org][Universal Data Plane API]] and the [[file:20210322140209-xds_api.org][v2 xDS API]]
+
+
+Envoy is designed to be /eventually consistent/. All the various management apis
+run concurrently, unaware of what the other apis are doing and creating, in
+toto, a consistent understanding of the system. There are cases when you want to
+dertiministically sequence messages through the api. For example, updating an
+envoy through a specific sequence of the API's to avoid a traffic drop. ADS allows for the marshalling of all other apis into a single [[file:20210217094935-grpc.org][gRPC]] bidirectional stream from a single management server, allowing for determistic sequencing.

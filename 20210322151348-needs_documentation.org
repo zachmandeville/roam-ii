@@ -1,0 +1,3 @@
+#+title: Needs Documentation
+
+AS I work on [[file:20210322102245-ecp.org][ECP]], it is good to find the spots of the API that needs documentation. This will collect all of them through backlinks

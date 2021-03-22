@@ -1,0 +1,5 @@
+#+title: SDS
+
+Service Discovery Service.  Part of [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]'s [[file:20210322140209-xds_api.org][xDS API]]
+
+In the v2 api, this stands for Secret Discovery Service.  In that case, it means a dedicated api for delivery of TLS key materials.

@@ -1,4 +1,23 @@
 #+title: Control Plane
 
-A Term used in routing and service meshes. It refers to all functions and
-processes that determine how packets should be forwarded through the network.
+Handles the actual configuration and _control_ of the various processes used by
+the [[file:20210322104226-data_plane.org][Data Plane]]. If the Data Plane does load-balancing following a rule of
+choosing between 5 servers in a round-robin format, this rule needed to be
+somehow specified. The Control plane is the method in which these specifications
+can be set.
+
+from [[file:20210216124707-data_plane_versus_control_plane.org][Data Plane Versus Control Plane]]:
+#+BEGIN_QUOTE
+The control plane takes a set of isolated stateless sidecar proxies and turns them into a distributed system....
+
+#+END_QUOTE
+
+For the longest time, the control plane was just humans.  Someone tasked with writing and maintaining config files that then deployed to their servers.  The goal now is to have a control plane UI (whether terminal or a web interface or what-have-you) where you can put in your specifications in a standard format, and the deployment and updating is done for you.
+
+From [[file:20210216103855-matt_klein.org][Matt Klein]], again:
+#+BEGIN_QUOTE
+Ultimately, the goal of the control plane is to set policy that will eventually be enacted by the [[file:20210322104226-data_plane.org][Data Plane]]
+#+END_QUOTE
+
+----
+- tags :: [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]

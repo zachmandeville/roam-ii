@@ -1,0 +1,11 @@
+#+title: xDS API
+
+the v2 of the [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] api, pointing toward a [[file:20210322135932-universal_data_plane_api.org][Universal Data Plane API]].
+
+it is made up of an X number of /discovery services/ (the DS).
+
+* Links
+- [data-plane-api](https://github.com/envoyproxy/envoy/tree/main/api) :: github
+  repo for the api]
+- [API Overview](https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/overview) :: generated from the [[file:20210225163318-proto3.org][proto3]] schema of the api
+- [xDS Overview](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol) :: from the official docs.
