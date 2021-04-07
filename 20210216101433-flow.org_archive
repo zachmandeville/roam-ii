@@ -47,3 +47,220 @@ See https://developers.google.com/protocol-buffers/docs/reference/go-generated#p
 [[file:20210225162351-proto_buffers_introduction.org][Proto Buffers Introduction]]
 ** DONE Complete gRPC course
 ** DONE WRite out blog post of my findings
+
+* DONE Watch the last con
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:25
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Go through presentation on computer, ensuring i can run each code block
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:25
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+The presentation is located in the[[file:~/Projects/apisnoop/][ APISnoop repo]]
+
+* DONE Determine what we want to update and adjust from the current slides
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:25
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+key: reduce code execution for sonobuoy and increase demo time of apisnoop
+
+* DONE Have a check in with conformance team
+SCHEDULED: <2021-03-23 Tue 10:30>
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:25
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Have property picked for first exercise
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+This should be one that is well in the scope of the xDS work
+See
+
+* DONE Setup basic gameplan for rest of march
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Meet with Riaan to discuss gameplan
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Create an envoy-conformance repo for tracking tickets
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+https://github.com/ii/envoy-conformance
+
+* DONE Meet with Riaan and HH to discuss the [[file:20210311085010-envoy_gameplan.org][envoy gameplan]]
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Add Agenda for conformance check,-in
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-03-23 Tue 15:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Revise prezzy org file for tighter flow
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:25
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Add Images and Code Blocks to revised flow
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:25
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Add Speaker Notes to presentation
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE divide speaking slides between caleb and myself
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE go through new presentation with Caleb, make sure we ahve it tight
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Travel to Tauranga
+SCHEDULED: <2021-03-31 Wed>
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Record presentation
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Submit Presentation
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Head back from Tauranga
+SCHEDULED: <2021-04-01 Thu>
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE in kubecon presentation kind.sh, run kind script from absolute path of apisnoop
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-06 Tue 09:26
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Kubecon Performance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+right now it is relative, make a onelineer to find the root of the git repo we are in and run the scripts from there.
+
+* DONE Set up an RSS feed with org
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-08 Thu 08:37
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Comfy Computer
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+check out [[file:20210316100544-doom_rss_feed.org][doom RSS Feed]]
+
+* DONE throw in example test server from istio into slack channel
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-08 Thu 08:38
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:
+
+* DONE Read through "[[file:20210406103023-life_of_a_request.org][Life of a Request]]"
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-04-08 Thu 08:38
+:ARCHIVE_FILE: ~/roam/20210216101433-flow.org
+:ARCHIVE_OLPATH: Projects/Envoy Conformance
+:ARCHIVE_CATEGORY: 20210216101433-flow
+:ARCHIVE_TODO: DONE
+:END:

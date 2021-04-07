@@ -1,0 +1,9 @@
+#+title: does my own config work?
+
+I should be able to run a tmate
+
+#+begin_src tmate :window zach
+pwd
+#+end_src
+
+And I can!!!

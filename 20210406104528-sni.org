@@ -1,0 +1,7 @@
+#+title: SNI
+
+Server Name Indication. An extension to TLS.  Basically the hostname a client is attempting to connect to.
+https://en.wikipedia.org/wiki/Server_Name_Indication
+
+----
+[[file:20210323093001-envoy_terminology.org][envoy terminology]]

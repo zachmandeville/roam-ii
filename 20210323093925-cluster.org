@@ -4,9 +4,9 @@ A group of logically similar [[file:20210323093244-upstream.org][Upstream]] host
 
 The way envoy interacts with clusters is a good overview of its capability/api.
 
-Envoy discovers a member of a cluster through service discovery.
+Envoy discovers a member of a cluster through [[file:20210323094240-service_discovery.org][service discovery]].
 
-Envoy optionally determines the health of a cluster through active health checking.
+Envoy optionally determines the health of a cluster through active [[file:20210323100338-health_checking.org][health checking]].
 
 Envoy determines which cluster member to route the request to through load balancing policy.
 

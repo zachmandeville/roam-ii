@@ -1,0 +1,13 @@
+#+title: pipe
+
+a method for communicating through different parts of a process on a CPU.  They are part of a single CPU or [[file:20210323092943-host.org][Host]], and deal with the input output stream of a process (think of how data moves through unix pipes).
+
+Compare to [[file:20210330151520-socket.org][socket]], which is for communicating across the OSI model...which could be communicating streams of data between different [[file:20210323092943-host.org][Host]]s or part of the same one, whereas pipes will be contained on a single [[file:20210323092943-host.org][Host]].
+
+* see also
+[[https://stackoverflow.com/questions/18568089/whats-the-difference-between-pipes-and-sockets]]
+[[https://www.careerride.com/os-socket-and-pipe.aspx]]
+
+---
+
+[[file:20210323093001-envoy_terminology.org][envoy terminology]]

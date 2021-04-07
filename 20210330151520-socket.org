@@ -1,0 +1,13 @@
+#+title: socket
+
+sockets are part of the osi model and meant for communication etween different layers in that model, in other words they are a means of sending packets of communication between [[file:20210323092943-host.org][hosts]].
+
+compare them to
+
+* see also
+[[https://stackoverflow.com/questions/18568089/whats-the-difference-between-pipes-and-sockets]]
+[[https://www.careerride.com/os-socket-and-pipe.aspx]]
+
+----
+
+[[file:20210323093001-envoy_terminology.org][envoy terminology]]

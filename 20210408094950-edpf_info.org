@@ -1,0 +1,13 @@
+#+title: edpf info
+
+if you get an issue tangling with  a warning about ~pdf-info-epdfinfo-tools~ you want to uninstall and reinstall the pdf tools.
+
+This code worked for me:
+
+#+begin_src elisp
+(delete-file pdf-info-epdfinfo-program)
+(pdf-tools-install)
+#+end_src
+
+----
+[[file:20210217151540-emacs.org][emacs]] [[file:20210318134402-til.org][til]]

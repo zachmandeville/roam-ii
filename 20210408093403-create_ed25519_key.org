@@ -1,0 +1,9 @@
+#+title: create ed25519 key
+
+Command to invoke is
+: ssh-keygen -a 100 -t ed25519 -f ~/.ssh/id_ed25519 -C "john@example.com"
+
+- -a :: how the number of KDF (key derivation function) rounds for generating the key.  The higher the number, slower password verification, which means harder for brute force password cracking if the key was stolen
+- -t :: the type of key, e.g.ed25519 or RSA
+- -f :: what file it should be saved as
+- -C :: a comment about the file

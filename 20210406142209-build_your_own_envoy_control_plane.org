@@ -1,0 +1,196 @@
+#+title: Build your own envoy control plane
+
+process as I move through this video: https://www.youtube.com/watch?v=qAuq4cKEG_E
+
+* Fork and clone go control plane
+
+#+BEGIN_SRC shell :dir ~/Projects/envoy
+git clone git@github.com:zachmandeville/go-control-plane.git
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC shell :dir ~/Projects/envoy/go-control-plane :results output
+tree -L 2
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+.
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── Dockerfile.ci
+├── LICENSE
+├── Makefile
+├── OWNERS.md
+├── README.md
+├── build
+│   ├── coverage.sh
+│   ├── example.sh
+│   ├── integration.sh
+│   └── run_docker.sh
+├── docs
+│   ├── README.md
+│   └── cache
+├── envoy
+│   ├── COMMIT
+│   ├── admin
+│   ├── annotations
+│   ├── api
+│   ├── config
+│   ├── data
+│   ├── extensions
+│   ├── service
+│   ├── type
+│   └── watchdog
+├── examples
+│   └── dyplomat
+├── go.mod
+├── go.sum
+├── internal
+│   ├── example
+│   └── upstream
+├── pkg
+│   ├── cache
+│   ├── conversion
+│   ├── integration
+│   ├── log
+│   ├── resource
+│   ├── server
+│   ├── test
+│   ├── ttl
+│   └── wellknown
+├── sample
+│   ├── bootstrap-ads.yaml
+│   ├── bootstrap-adsv3.yaml
+│   ├── bootstrap-rest.yaml
+│   ├── bootstrap-restv3.yaml
+│   ├── bootstrap-xds.yaml
+│   └── bootstrap-xdsv3.yaml
+├── scripts
+│   ├── check_version_dirty.sh
+│   ├── create_version.sh
+│   └── export.sh
+└── support
+    ├── README.md
+    ├── bootstrap
+    └── hooks
+
+32 directories, 26 files
+#+end_example
+
+* Fork and clone sample xds server
+This is using the simple State-of-the-World style, where everytime there is a
+change we send envoy the complete config at that point in time (or the current
+state of the world) and it updates accordingly. Compare this to incremental, or
+delta xDS, that only sends what's changed.
+
+We are also going with the simple single stream per type. This is just to learn
+it. For our own purposes, we want to implement an [[file:20210322142924-ads.org][ADS]] server. This will be good
+to show it is working and that we have working systems on this machine.
+
+#+BEGIN_SRC shell :dir ~/Projects/envoy/ :results silent
+git clone git@github.com:zachmandeville/envoy-xds-server.git
+#+END_SRC
+
+#+BEGIN_SRC shell :dir ~/Projects/envoy/envoy-xds-server :results output
+tree -L 2
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+.
+├── Dockerfile
+├── Makefile
+├── README.md
+├── apis
+│   └── v1alpha1
+├── cmd
+│   └── server
+├── go.mod
+├── go.sum
+├── hack
+│   ├── bootstrap.yaml
+│   └── start-envoy.sh
+└── internal
+    ├── processor
+    ├── resources
+    ├── server
+    ├── watcher
+    └── xdscache
+
+11 directories, 7 files
+#+end_example
+
+The heart of the file is in ~cmd/server/main.go~ which we will look at in more detail later.
+
+* Create config file for xds server
+
+The basic example shows that envoy will be listening to changes in a yaml file
+and updating it's configuration accordingly, a mix of static and dynamic
+configuration. We should be able to increse or decrese the clusters available
+through updating a config and seeing that reflected in our service mesThe basic
+example shows that envoy will be listening to changes in a yaml file and
+updating it's configuration accordingly, a mix of static and dynamic
+configuration. We should be able to increse or decrese the clusters available
+through updating a config and seeing that reflected in our service meshh
+
+So, we should create that initial config!
+
+#+NAME: Initial xDS Server Config
+#+begin_src yaml :tangle ~/Projects/envoy/envoy-xds-server/config/config.yaml
+name: z_config
+spec:
+  listeners:
+  - name: listener_0
+    address: 0.0.0.0
+    port: 9000
+    routes:
+    - name: echoroute
+      prefix: /
+      clusters:
+      - echo
+  clusters:
+  - name: echo
+    endpoints:
+    - address: 0.0.0.0
+      port: 9101
+    - address: 0.0.0.0
+      port: 9102
+#+end_src
+
+This config matches closely to our [[file:20210330145200-envoy_demo_static_configuration.org][envoy demo static configuration]], you set up a
+listener that listens downstream to send requests to the right clusters
+upstream.
+
+* Running the program.
+
+For this, we want to have a few docker programs running, each one just a server echoing a command.  We want one on port 9101 and 9102.  We'll do this for 9101-9104, though, to show later that we can add and remove endpoints easily
+
+#+NAME: start up echo servers
+#+begin_src tmate :window init
+for PORT in {9101,9102,9103,9104}
+do
+  docker run -d --rm --name=echo$PORT -p $PORT:8080 stevesloka/echo-server echo-server --echotext=Sample-Endpoint!
+done
+#+end_src
+
+We can now run the program and see echos coming in
+#+NAME: run program
+#+begin_src tmate :dir ~/Projects/envoy/envoy-xds-server :window xds
+go run cmd/server/main.go
+#+end_src
+
+We get output like so
+#+begin_example
+DEBU[0000] will serve snapshot {Resources:[{Version:411 Items:map[echo:cluster_name:"echo"  endpoints:{lb_endpoints:{endpoint:{address:{socket_address:{address:"0.0.0.0"  port_value:9101}}}}  lb_endpoints:{endpoint:{address:{socket_address:{address:"0.0.0.0"  port_value:9102}}}}}]} {Version:411 Items:map[echo:name:"echo"  type:EDS  eds_cluster_config:{eds_config:{api_config_source:{api_type:GRPC  transport_api_version:V3  grpc_services:{envoy_grpc:{cluster_name:"xds_cluster"}}  set_node_on_first_message_only:true}  resource_api_version:V3}}  connect_timeout:{seconds:5}  dns_lookup_family:V4_ONLY]} {Version:411 Items:map[listener_0:name:"listener_0"  virtual_hosts:{name:"local_service"  domains:"*"  routes:{match:{prefix:"/"}  route:{cluster:"echo"}}}]} {Version:411 Items:map[listener_0:name:"listener_0"  address:{socket_address:{address:"0.0.0.0"  port_value:9000}}  filter_chains:{filters:{name:"envoy.filters.network.http_connection_manager"  typed_config:{[type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager]:{stat_prefix:"http"  rds:{config_source:{api_config_source:{api_type:GRPC  transport_api_version:V3  grpc_services:{envoy_grpc:{cluster_name:"xds_cluster"}}  set_node_on_first_message_only:true}  resource_api_version:V3}  route_config_name:"listener_0"}  http_filters:{name:"envoy.filters.http.router"}}}}}]} {Version:411 Items:map[]} {Version:411 Items:map[]}]}  context=processor
+2021/04/08 10:05:18 management server listening on 9002
+#+end_example
+
+which is to say, the server is running with info from our config! we can see the
+routes and the cluster endpoints becomiong our load_balancing assignment and
+that we are using the http connection manager to do the routing accordingly
+
+* Look into the file
+
+To better understand ~cmd/server/main.go~, let's build it again!

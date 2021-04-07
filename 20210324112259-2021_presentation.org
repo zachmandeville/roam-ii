@@ -1,0 +1,86 @@
+#+title: 2021 Presentation
+
+* Title
+* Who We Are
+* Kubernetes Conformance
+** Consistent behaviour across providers
+** Easy to browse conformant providers through landscape
+** For vendors: simple way to test conformance and request certification
+* Conformance as Code
+Because conformance is defined in code, you can build tools to support conformance that fit easily into the k8s ecosystem and pipelines
+For example, tools to help vendors get conformance certification
+* Conformance Certification with Sonobuoy
+** What it is sonobuoy and where to get it
+** Steps for certification:
+- run sonobuoy on your cluster
+- inspect the output logs, confirm you are conformant
+- submit the logs in a PR to the conformance REPO
+- await certification
+* Improving Conformance Coverage with APISnoop
+For the certification to have value, we want to ensure the conformant endpoints
+are relaible and consistent. We do this through conformance tests.
+Goal is to:
+- identify gabs
+- fill gaps
+- prevent new gaps
+We do this through APISnoop
+* Identifying Gaps in Kubernetes Conformance Coverage
+** https://apisnoop.cncf.io
+
+[[./kubecon-2021-europe-sunburst.png]]
+
+** snoopDB
+[[https://github.com/cncf/apisnoop/blob/master/apps/snoopdb/tables-views-functions.org#basic-database-setup][Database Setup]] Schemas:
+- public :: from k/k [[https://github.com/kubernetes/kubernetes/tree/master/api/openapi-spec][swagger.json]]
+- conformance :: CI job [[https://gcsweb.k8s.io/gcs/kubernetes-jenkins/logs/ci-kubernetes-gce-conformance-latest/1319331777721929728/artifacts/bootstrap-e2e-master/][api-audit.logs]]
+- testing :: from live in-cluster usage
+
+#+begin_notes
+How can I deploy snoopdb in my cluster and ask my own questions about the API shape and usage?
+#+end_notes
+* Closing gaps in Kubernetes Conformance Coverage
+**  Our test writing flow
+- custom query to find untested endpoints
+- write go code and execute it on the cluster
+- use snoopdb to see if this code hit expected endpoints
+- see projected change in coverage
+- export as PR
+* Preventing gaps in Kubernetes Conformance Coverage
+** testgrid.k8s.io
+
+[[./kubecon-2021-europe-testgrid.png]]
+
+** sig-arch / conformance prow jobs
+
+[[https://github.com/kubernetes/test-infra/tree/master/config/jobs/kubernetes/sig-arch][kubernetes/test-infra config/jobs/kubernetes/sig-arch]]
+
+[[./kubecon-2021-europe-prow-jobs.png]]
+
+** apisnoop-conformance-gate
+
+[[https://github.com/kubernetes/test-infra/blob/master/config/jobs/kubernetes/sig-arch/conformance-gate.yaml][Eventually Release Blocking Conformance Job]]
+
+[[./kubecon-2021-europe-blocking-job.png]]
+
+** Job Fails and Emails
+
+Any new gaps in coverage are detected
+
+#+begin_src yaml
+  name: apisnoop-conformance-gate
+  annotations:
+    testgrid-dashboards: sig-arch-conformance
+    testgrid-tab-name: apisnoop-conformance-gate
+    test-grid-alert-email: kubernetes-sig-arch-conformance-test-failures@googlegroups.com
+    testgrid-num-failures-to-alert: '1'
+    description: 'Uses APISnoop to check that new GA endpoints are conformance tested in latest e2e test run'
+#+end_src
+
+#+begin_notes
+This job will help us notify sig-release that there is a new API that must have Conformance Tests OR be reverted before a release can happen.
+#+end_notes
+
+-
+
+* Conclusion - Conformance is a great initiative with benefits for vendors and consumers - We can use awesome tools like Sonobuoy and APISnoop to validate clusters and strengthen conformance
+* Q&A

@@ -1,0 +1,223 @@
+#+title: Setup Envoy on Local Cluster
+#+PROPERTY: header-args:tmate+ :session local-envoy
+
+My steps for getting [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] up on a Macbook pro 2016
+
+* Install Envoy
+I can install it with [[https://brew.sh][brew]]
+#+BEGIN_SRC tmate
+brew install envoy
+#+END_SRC
+
+I should now be able to check my version of envoy
+
+#+BEGIN_SRC shell
+envoy --version
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+envoy  version: d6a4496e712d7a2335b26e2f76210d5904002c26/1.17.1/Modified/DEBUG/BoringSSL
+
+#+end_example
+
+Beauty, 1.17.1, the [[https://www.envoyproxy.io/docs/envoy/v1.17.1/version_history/v1.17.1][newest version]]
+* View command line options
+#+BEGIN_SRC shell
+envoy --help
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+USAGE:
+
+   envoy  [--socket-mode <string>] [--socket-path <string>]
+          [--disable-extensions <string>] [--cpuset-threads]
+          [--enable-mutex-tracing] [--disable-hot-restart] [--mode
+          <string>] [--parent-shutdown-time-s <uint32_t>] [--drain-strategy
+          <string>] [--drain-time-s <uint32_t>] [--file-flush-interval-msec
+          <uint32_t>] [--service-zone <string>] [--service-node <string>]
+          [--service-cluster <string>] [--hot-restart-version]
+          [--restart-epoch <uint32_t>] [--log-path <string>]
+          [--enable-fine-grain-logging] [--log-format-escaped]
+          [--log-format <string>] [--component-log-level <string>] [-l
+          <string>] [--local-address-ip-version <string>]
+          [--admin-address-path <string>] [--ignore-unknown-dynamic-fields]
+          [--reject-unknown-dynamic-fields] [--allow-unknown-static-fields]
+          [--allow-unknown-fields] [--bootstrap-version <string>]
+          [--config-yaml <string>] [-c <string>] [--concurrency <uint32_t>]
+          [--base-id-path <string>] [--use-dynamic-base-id] [--base-id
+          <uint32_t>] [--] [--version] [-h]
+
+
+Where:
+
+   --socket-mode <string>
+     Socket file permission
+
+   --socket-path <string>
+     Path to hot restart socket file
+
+   --disable-extensions <string>
+     Comma-separated list of extensions to disable
+
+   --cpuset-threads
+     Get the default # of worker threads from cpuset size
+
+   --enable-mutex-tracing
+     Enable mutex contention tracing functionality
+
+   --disable-hot-restart
+     Disable hot restart functionality
+
+   --mode <string>
+     One of 'serve' (default; validate configs and then serve traffic
+     normally) or 'validate' (validate configs and exit).
+
+   --parent-shutdown-time-s <uint32_t>
+     Hot restart parent shutdown time in seconds
+
+   --drain-strategy <string>
+     Hot restart drain sequence behaviour, one of 'gradual' (default) or
+     'immediate'.
+
+   --drain-time-s <uint32_t>
+     Hot restart and LDS removal drain time in seconds
+
+   --file-flush-interval-msec <uint32_t>
+     Interval for log flushing in msec
+
+   --service-zone <string>
+     Zone name
+
+   --service-node <string>
+     Node name
+
+   --service-cluster <string>
+     Cluster name
+
+   --hot-restart-version
+     hot restart compatibility version
+
+   --restart-epoch <uint32_t>
+     hot restart epoch #
+
+   --log-path <string>
+     Path to logfile
+
+   --enable-fine-grain-logging
+     Logger mode: enable file level log control(Fancy Logger)or not
+
+   --log-format-escaped
+     Escape c-style escape sequences in the application logs
+
+   --log-format <string>
+     Log message format in spdlog syntax (see
+     https://github.com/gabime/spdlog/wiki/3.-Custom-formatting)
+
+     Default is "[%Y-%m-%d %T.%e][%t][%l][%n] [%g:%#] %v"
+
+   --component-log-level <string>
+     Comma separated list of component log levels. For example
+     upstream:debug,config:trace
+
+   -l <string>,  --log-level <string>
+     Log levels: [trace][debug][info][warning
+     |warn][error][critical][off]
+
+     Default is [info]
+
+   --local-address-ip-version <string>
+     The local IP address version (v4 or v6).
+
+   --admin-address-path <string>
+     Admin address path
+
+   --ignore-unknown-dynamic-fields
+     ignore unknown fields in dynamic configuration
+
+   --reject-unknown-dynamic-fields
+     reject unknown fields in dynamic configuration
+
+   --allow-unknown-static-fields
+     allow unknown fields in static configuration
+
+   --allow-unknown-fields
+     allow unknown fields in static configuration (DEPRECATED)
+
+   --bootstrap-version <string>
+     API version to parse the bootstrap config as (e.g. 3). If unset, all
+     known versions will be attempted
+
+   --config-yaml <string>
+     Inline YAML configuration, merges with the contents of --config-path
+
+   -c <string>,  --config-path <string>
+     Path to configuration file
+
+   --concurrency <uint32_t>
+     # of worker threads to run
+
+   --base-id-path <string>
+     path to which the base ID is written
+
+   --use-dynamic-base-id
+     the server chooses a base ID dynamically. Supersedes a static base ID.
+     May not be used when the restart epoch is non-zero.
+
+   --base-id <uint32_t>
+     base ID so that multiple envoys can run on the same host if needed
+
+   --,  --ignore_rest
+     Ignores the rest of the labeled arguments following this flag.
+
+   --version
+     Displays version information and exits.
+
+   -h,  --help
+     Displays usage information and exits.
+
+
+   envoy
+
+#+end_example
+* Try out demo configuration
+For this, I want to make a learning directory to keep all the envoy files
+
+#+NAME: create learning dir
+#+BEGIN_SRC shell
+mkdir -p ~/Learning/envoy
+mkdir -p ~/Learning/envoy/configs
+#+END_SRC
+
+The docs offer a demo configuration, which I've tangled into the learning directory, and outline here:
+[[file:20210330145200-envoy_demo_static_configuration.org][envoy demo static configuration]]
+
+We can validate the configuration, to ensure it's formatted properly.
+#+BEGIN_SRC shell
+envoy --mode validate -c $HOME/Learning/envoy/configs/static-demo.yaml
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+configuration '/Users/zz/Learning/envoy/configs/static-demo.yaml' OK
+#+end_example
+
+And then start up envoy with this config.
+
+#+BEGIN_SRC tmate
+envoy -c $HOME/Learning/envoy/configs/static-demo.yaml
+#+END_SRC
+
+With it, we should find a curl to localhost:10000 brings us to the envoy proxy homepage
+
+#+BEGIN_SRC shell
+curl localhost:10000
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Redirecting to https://www.envoyproxy.io/
+#+end_example

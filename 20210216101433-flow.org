@@ -4,20 +4,17 @@ My current flow, a big todo of needs and such
 * Inbox
 * Projects
 ** Comfy Computer
-*** Set up an RSS feed with org
+*** DONE Set up an RSS feed with org
 check out [[file:20210316100544-doom_rss_feed.org][doom RSS Feed]]
 ** Envoy Conformance
-*** DONE Setup basic gameplan for rest of march
-*** DONE Meet with Riaan to discuss gameplan
-*** DONE Create an envoy-conformance repo for tracking tickets
-https://github.com/ii/envoy-conformance
-*** DONE Meet with Riaan and HH to discuss the [[file:20210311085010-envoy_gameplan.org][envoy gameplan]]
-*** DONE Add Agenda for conformance check,-in
-*** STRT Have property picked for first exercise
-This should be one that is well in the scope of the xDS work
-See
-*** TODO Have a check in with conformance team
-SCHEDULED: <2021-03-23 Tue 10:30>
+*** DONE throw in example test server from istio into slack channel
+*** DONE Read through "[[file:20210406103023-life_of_a_request.org][Life of a Request]]"
+*** DONE Setup Envoy on local cluster
+Tracking work here: [[file:20210326092418-setup_envoy_on_local_cluster.org][Setup Envoy on Local Cluster]]
+*** STRT setup go control plane
+I want to be able to set up dummy ads servers and send requests to it, and having my own control plane would help with this i do believe.
+tracking work here: [[file:20210406142209-build_your_own_envoy_control_plane.org][Build your own envoy control plane]]
+*** TODO explore constructing custom ADS server
 *** Test Case written for xDS
 ** APISnoop low-maintenance
 *** TODO Webapp uses ineligible-endpoints.yaml to gather its endpoints
@@ -25,6 +22,9 @@ SCHEDULED: <2021-03-23 Tue 10:30>
 *** releases on web app update near-automatically
 *** releases on db update near-automatically
 *** swagger.json created for 1.0 > 1.4
+** TODO [#A] Kubecon Performance
+*** Attend and answer Q's for kubecon
+SCHEDULED: <2021-05-06 Thu 21:30>
 ** NCW
 *** DONE Attend Contribex Meeting
 SCHEDULED: <2021-02-16 Tue 13:00>
@@ -44,15 +44,3 @@ it is hard to do as a global package, but could be done as a file local variable
 *** export into reveal presentation
 *** Document changes needed to get working reveal presentation
 *** explore having both exports work from one file, else find alternative
-** Kubecon Performance
-*** DONE Watch the last con
-*** STRT Go through presentation on computer, ensuring i can run each code block
-The presentation is located in the[[file:~/Projects/apisnoop/][ APISnoop repo]]
-*** Determine what we want to update and adjust from the current slides
-*** divide speaking slides between caleb and myself
-*** go through new presentation with Caleb, make sure we ahve it tight
-*** Record presentation
-*** Review with team
-*** Submit Presentation
-*** in kubecon presentation kind.sh, run kind script from absolute path of apisnoop
-right now it is relative, make a onelineer to find the root of the git repo we are in and run the scripts from there.
