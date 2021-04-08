@@ -1,0 +1,190 @@
+#+title: go control plane ADS Server
+
+What are the steps to implement ADS for the server we made with [[file:20210406142209-build_your_own_envoy_control_plane.org][Build your own envoy control plane]] ?
+
+* Comparing bootstrap yamls
+
+In the [[https://github.com/envoyproxy/go-control-plane][go control plane repo]], they have a samples dir with a yaml for ADS v3
+
+I have it locally here: [[file:~/Projects/envoy/go-control-plane/sample/bootstrap-adsv3.yaml::set_node_on_first_message_only: true][ADS Bootstrap Sample]]
+
+in the [[https://github.com/zachmandeville/envoy-xds-server][envoy-xds-server]], the bootstrap yaml used is in the hack dir. Locally
+here: [[file:~/Projects/envoy/envoy-xds-server/hack/bootstrap.yaml::cds_config:][simple xDS bootstrap]]
+
+comparing the two, besides the different ports, it kind of seems like the former just has an ADS_config section and, for each of its services, an ADS resource, that is set to empty....is it that simple?
+
+* Writing a new bootstrap
+
+Let's make a new ads-bootstrap and put in our forked repo
+
+#+NAME: ADS Bootstrap
+#+begin_src yaml :notangle ~/Projects/envoy/envoy-xds-server/hack/ads-bootstrap.yaml
+# Base config for a  split xDS management server on 9002, admin port on 9003
+static_resources:
+  clusters:
+    - connect_timeout: 1s
+      load_assignment:
+        cluster_name: xds_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 127.0.0.1
+                      port_value: 9002
+      http2_protocol_options: {}
+      name: xds_cluster
+dynamic_resources:
+  ads_config:
+    api_type: GRPC
+    transport_api_version: V3
+    grpc_services:
+    - envoy_grpc:
+        cluster_name: xds_cluster
+    set_node_on_first_message_only: true
+  cds_config:
+    resource_api_version: V3
+    ads: {}
+    api_config_source:
+      api_type: GRPC
+      transport_api_version: V3
+      grpc_services:
+        - envoy_grpc:
+            cluster_name: xds_cluster
+      set_node_on_first_message_only: true
+  lds_config:
+    resource_api_version: V3
+    ads: {}
+    api_config_source:
+      api_type: GRPC
+      transport_api_version: V3
+      grpc_services:
+        - envoy_grpc:
+            cluster_name: xds_cluster
+      set_node_on_first_message_only: true
+node:
+  cluster: test-cluster
+  id: test-id
+layered_runtime:
+  layers:
+    - name: runtime-0
+      rtds_layer:
+        rtds_config:
+          resource_api_version: V3
+          ads: {}
+          # api_config_source:
+          #   transport_api_version: V3
+          #   api_type: GRPC
+          #   grpc_services:
+          #     envoy_grpc:
+          #       cluster_name: xds_cluster
+        name: runtime-0
+admin:
+  access_log_path: /dev/null
+  address:
+    socket_address:
+      address: 127.0.0.1
+      port_value: 9003
+
+
+#+end_src
+
+Then, let's switch our start function to take a yaml argument, so we can switch between the two easily and compare them
+
+#+NAME: start-envoy.sh
+#+begin_src shell :tangle ~/Projects/envoy/envoy-xds-server/hack/start-envoy.sh
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Path to Envoy
+ENVOY=${ENVOY:-/usr/local/bin/envoy}
+
+# are there no input args set? then run our default
+if [[ $# -eq 0 ]]; then
+  echo "using default"
+  ${ENVOY} -c  hack/bootstrap.yaml # --drain-time-s 1  # -l debug
+else #take the first arg as the yaml to run
+  echo "using bootstrap file: $1"
+  ${ENVOY} -c  $1 # --drain-time-s 1  # -l debug
+fi
+#+end_src
+* First try, didn't work
+
+so the addition of just an ADS setting didn't work, because the api_config_source is a type oneof and that doesnt' work with ADS( according to my error message )
+#+begin_example
+...
+Unable to parse JSON as proto (INVALID_ARGUMENT:(dynamic_resources.cds_config): invalid value oneof field 'config_source_specifier' is already set. Cannot set 'ads' for type oneofUnable to parse JSON as proto (INVALID_ARGUMENT:(dynamic_resources.cds_config): invalid value oneof field 'config_source_specifier' is already set. Cannot set 'ads' for type oneof)Unable to parse JSON as proto (INVALID_ARGUMENT:(dynamic_resources.cds_config): invalid value oneof field 'config_source_specifier' is already set. Cannot set 'ads' for type oneoUnable to parse JSON as proto (INVALID_ARGUMENT:(dynamic_resources.cds_config): invalid value oneof field 'config_source_specifier' is already set. Cannot set 'ads' for type oneof): {"admin":{"access_log_path":"/dev/null","address":{"socket_address":{"port_value":9003,"address":"127.0.0.1"}}},"nodeUnable to parse JSON as proto (INVALID_ARGUMENT:(dynamic_resources.cds_config): invalid value oneof field 'config_source_specifier' is already set. Cannot set 'ads' for type oneof): {"admin":{"access_log_path":"/dev/null","address":{"socket_address":{"port_value":9003,"address":"127.0.0.1"}}},"node"
+...
+#+end_example
+
+let's learn more about this bootstrap config!
+
+* Try two
+
+From reading the [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] docs, it seems like if you have the ADS_config set, everything springs from that and you don't need to set the config for any other part of the clusters.  it is assuming one aggregated source...which makes some sense.
+
+So what happens if we only set our ads_config, and then reference ads in each other cluster config?
+
+#+NAME: ADS Bootstrap
+#+begin_src yaml :tangle ~/Projects/envoy/envoy-xds-server/hack/ads-bootstrap.yaml
+# Base config for a  split xDS management server on 9002, admin port on 9003
+static_resources:
+  clusters:
+    - connect_timeout: 1s
+      load_assignment:
+        cluster_name: xds_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 127.0.0.1
+                      port_value: 9002
+      http2_protocol_options: {}
+      name: xds_cluster
+dynamic_resources:
+  ads_config:
+    api_type: GRPC
+    transport_api_version: V3
+    grpc_services:
+    - envoy_grpc:
+        cluster_name: xds_cluster
+    set_node_on_first_message_only: true
+  cds_config:
+    resource_api_version: V3
+    ads: {}
+  lds_config:
+    resource_api_version: V3
+    ads: {}
+node:
+  cluster: test-cluster
+  id: test-id
+layered_runtime:
+  layers:
+    - name: runtime-0
+      rtds_layer:
+        rtds_config:
+          resource_api_version: V3
+          ads: {}
+        name: runtime-0
+admin:
+  access_log_path: /dev/null
+  address:
+    socket_address:
+      address: 127.0.0.1
+      port_value: 9003
+#+end_src
+
+I'll run my hack script in a separate terminal
+
+#+begin_src tmate :window hack :dir ~/Projects/envoy/envoy-xds-server
+bash hack/start-envoy.sh ads-bootstrap.yaml
+#+end_src
+
+and...it worked!  I can still adjust the file and see it update in my curl command (see [[file:20210406142209-build_your_own_envoy_control_plane.org][Build your own envoy control plane]], for what I mean by the update and commands).  This was...easier than expected!
+
+
+---
+from [[file:20210216101433-flow.org][flow]]

@@ -11,8 +11,12 @@ Tracking work here: [[file:20210326092418-setup_envoy_on_local_cluster.org][Setu
 *** DONE setup go control plane
 I want to be able to set up dummy ads servers and send requests to it, and having my own control plane would help with this i do believe.
 tracking work here: [[file:20210406142209-build_your_own_envoy_control_plane.org][Build your own envoy control plane]]
-*** Grab riaan's transcription and add to my roam brain.
-*** TODO explore constructing custom ADS server
+*** DONE Grab riaan's transcription and add to my roam brain.
+Added here: [[file:20210408151331-technical_summary_from_6_4_21.org][Technical Summary from 6-4-21]]
+*** DONE explore constructing custom ADS server
+Tracking work here: [[file:20210408153819-go_control_plane_ads.org][go control plane ADS]]
+*** Ask for feedback on bootstrap yaml from slack team
+I have something that works, but want their opinion on the bootstrap setup and all that.
 *** Test Case written for xDS
 ** APISnoop low-maintenance
 *** TODO Webapp uses ineligible-endpoints.yaml to gather its endpoints
