@@ -4,16 +4,14 @@ My current flow, a big todo of needs and such
 * Inbox
 * Projects
 ** Comfy Computer
-*** DONE Set up an RSS feed with org
-check out [[file:20210316100544-doom_rss_feed.org][doom RSS Feed]]
+*** Install Pass and get it working on workzach machine
 ** Envoy Conformance
-*** DONE throw in example test server from istio into slack channel
-*** DONE Read through "[[file:20210406103023-life_of_a_request.org][Life of a Request]]"
 *** DONE Setup Envoy on local cluster
 Tracking work here: [[file:20210326092418-setup_envoy_on_local_cluster.org][Setup Envoy on Local Cluster]]
-*** STRT setup go control plane
+*** DONE setup go control plane
 I want to be able to set up dummy ads servers and send requests to it, and having my own control plane would help with this i do believe.
 tracking work here: [[file:20210406142209-build_your_own_envoy_control_plane.org][Build your own envoy control plane]]
+*** Grab riaan's transcription and add to my roam brain.
 *** TODO explore constructing custom ADS server
 *** Test Case written for xDS
 ** APISnoop low-maintenance

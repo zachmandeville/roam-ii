@@ -178,7 +178,7 @@ done
 We can now run the program and see echos coming in
 #+NAME: run program
 #+begin_src tmate :dir ~/Projects/envoy/envoy-xds-server :window xds
-go run cmd/server/main.go
+go run cmd/server2/main.go
 #+end_src
 
 We get output like so
@@ -192,5 +192,307 @@ routes and the cluster endpoints becomiong our load_balancing assignment and
 that we are using the http connection manager to do the routing accordingly
 
 * Look into the file
+:PROPERTIES:
+:header-args: :tangle ~/Projects/envoy/envoy-xds-server/cmd/server2/main.go
+:END:
 
 To better understand ~cmd/server/main.go~, let's build it again!
+
+I will build it as main2.go, to not overwrite until I'm ready.
+
+** Pkg and Imports
+this will be the main package and we are importing some tooling from our go-control-plane and internal files within this repo
+
+#+NAME:
+#+begin_src go
+package main
+
+import (
+	"context"
+	"flag"
+
+	"github.com/envoyproxy/go-control-plane/pkg/cache/v3"
+	serverv3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
+	log "github.com/sirupsen/logrus"
+	"github.com/stevesloka/envoy-xds-server/internal/processor"
+	"github.com/stevesloka/envoy-xds-server/internal/server"
+	"github.com/stevesloka/envoy-xds-server/internal/watcher"
+)
+
+#+end_src
+
+Then we set up some initial variables to be used in our main function
+
+#+NAME: declare vars
+#+begin_src go
+var (
+	l log.FieldLogger
+
+	watchDirectoryFileName string
+	port                   uint
+	basePort               uint
+	mode                   string
+
+	nodeID string
+)
+
+#+end_src
+
+
+** Init Function
+The go init function will be run the first time the program is initalized, so it's good to do our setup here, in this case setting up some flags for the program, givbing it a default port and such.
+
+#+NAME: init function
+#+begin_src go
+func init() {
+	l = log.New()
+	log.SetLevel(log.DebugLevel)
+
+	// The port that this xDS server listens on
+	flag.UintVar(&port, "port", 9002, "xDS management server port")
+
+	// Tell Envoy to use this Node ID
+	flag.StringVar(&nodeID, "nodeID", "test-id", "Node ID")
+
+	// Define the directory to watch for Envoy configuration files
+	flag.StringVar(&watchDirectoryFileName, "watchDirectoryFileName", "config/config.yaml", "full path to directory to watch for files")
+}
+
+#+end_src
+** our main function
+
+The basic flow of the function will be
+
+#+begin_src go :noweb yes
+func main() {
+	flag.Parse()
+
+	<<Create cache>>
+	<<Create processor>>
+	<<Create initial snapshot from file>>
+	<<Make notify channel>>
+	<<Watch for file changes>>
+	<<Run xDS server>>
+	<<Process new messages>>
+}
+
+#+end_src
+
+
+OUr cache is a snapshot cache as defined in the go-control-plane. The first arg
+is an ADS boolean, which in the docs is explained as
+#+begin_quote
+// ADS flag forces a delay in responding to streaming requests until all
+// resources are explicitly named in the request. This avoids the problem of a
+// partial request over a single stream for a subset of resources which would
+// require generating a fresh version for acknowledgement. ADS flag requires
+// snapshot consistency. For non-ADS case (and fetch), multiple partial
+// requests are sent across multiple streams and re-using the snapshot version
+// is OK.
+#+end_quote
+
+
+The second arg is for the node hash, which is how you'd identify this particular
+envoy instance. last is our logger.
+
+#+NAME: Create cache
+#+begin_src go :tangle no
+// Create a cache
+cache := cache.NewSnapshotCache(false, cache.IDHash{}, l)
+
+#+end_src
+
+The processor is defined in the internal packages of this repo, and will manage
+the parsing of our yaml file and the creation of new snapshots to send to envoy.
+It wants a starting cache, nodeId, and log, which we give it. From this it will
+create an xDS cache of our listeners, clusters, endpoints, and routes.
+
+
+#+NAME: Create processor
+#+begin_src go :tangle no
+// Create a processor
+proc := processor.NewProcessor(
+    cache, nodeID, log.WithField("context", "processor"))
+
+#+end_src
+
+
+To start our program, we create the initial snapshot, a State of the World, to
+send to envoy to have it adjust appropriately. This is also defined ionternally,
+but we are going to be watching ~config/config.yaml~ and when it changes,
+parsing it to build our our new xDS Cache.
+
+#+NAME: Create initial snapshot from file
+#+begin_src go :tangle no
+// Create initial snapshot from file
+proc.ProcessFile(watcher.NotifyMessage{
+    Operation: watcher.Create,
+    FilePath:  watchDirectoryFileName,
+})
+
+#+end_src
+
+With that started up, we set a channel with our NotifyMessage type, which is
+looking for if things are Created,Removed, or Modified in our config.yaml
+
+#+NAME: Make notify channel
+#+begin_src go :tangle no
+// Notify channel for file system events
+notifyCh := make(chan watcher.NotifyMessage)
+
+#+end_src
+
+
+
+We have a go routines running that watch for file changes, and process
+the new file when it changes, sending this new config as a snapshot to envoy to
+update its configuration appropriately.
+
+#+NAME: Watch for file changes
+#+begin_src go :tangle no
+go func() {
+    // Watch for file changes
+    watcher.Watch(watchDirectoryFileName, notifyCh)
+}()
+
+#+end_src
+
+
+We have a second go routine that starts our server, which is set using the v3
+server base, so can do [[file:20210217094935-grpc.org][gRPC]] and [[file:20210322142924-ads.org][ADS]] if we so wanted.
+
+#+NAME: Run xDS server
+#+begin_src go :tangle no
+go func() {
+    // Run the xDS server
+    ctx := context.Background()
+    srv := serverv3.NewServer(ctx, cache, nil)
+    server.RunServer(ctx, srv, port)
+}()
+
+#+end_src
+
+With our channel receiving new message from our Watcher function we then can set a continually running for loop
+that, when there is a new message, processes the file, creates a config from it, sends that config to our envoy.
+
+#+NAME: Process new messages
+#+begin_src go :tangle no
+for {
+    select {
+    case msg := <-notifyCh:
+        proc.ProcessFile(msg)
+    }
+}
+#+end_src
+
+* Recap
+So everything we did above was to create an xDS management server which we can
+deploy as a cluster for envoy. It is bound to port 9002, and sets up a listener
+for port 9000. No matter which route we choose, it sends it to our ~echo~
+cluster, which has endpoints at a couple different ports. So, if someone curls
+localhost:9000 (the path of our listener), it will direct the request to either
+of our echo endpoints who will return the right response.
+
+This server is set to be dynamically configured. It starts with a basic config,
+but as you change the config file, it will be notified and send the changes to
+envoy appropriately.
+
+Next, let's run envoy.
+* Run envoy
+There is a [[file:~/Projects/envoy/envoy-xds-server/hack/bootstrap.yaml][bootstrap script]] set up for getting our envoy started. Importantly,
+this script just sets a management cluster, and then is told essentially to
+follow whatever this management cluster says. We will determine our listeners
+and cllusters from whatever our xDS server says. Since our xDS server is running
+on port 9002, that is the address we give the bootstrap.yaml too.
+
+#+NAME: run envoy
+#+begin_src tmate :window envoy :dir ~/Projects/envoy/envoy-xds-server
+./hack/start-envoy.sh
+#+end_src
+
+* Test it out
+
+With envoy running, we can now ping localhost:9000 and get a response from one of our echo servers.
+
+#+begin_src shell :results output
+curl localhost:9000
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ECHO Request Server:
+--------------------
+App:
+    Sample-Endpoint!
+Host:
+    30a2a938d729
+Request:
+    http://localhost:9000/
+Headers:
+    map[Accept:[*/*] Content-Length:[0] User-Agent:[curl/7.64.1] X-Envoy-Expected-Rq-Timeout-Ms:[15000] X-Forwarded-Proto:[http] X-Request-Id:[026d1105-65d1-44dd-8a34-81023e9f5111]]
+#+end_example
+
+What is more exciting is when you ping over and over, as we can see that the host will change between the two echo endpoints we set.
+
+#+NAME: curl :9000 over and over
+#+begin_src tmate :window testing
+while sleep 1; do
+    curl -i http://localhost:9000
+done
+#+end_src
+
+For me it wavers between host 30a.... and 2ec...
+
+I will adjust the config, and remove one of the endpoints, so it'd look like
+
+#+NAME: Initial xDS Server Config
+#+begin_src yaml :tangle ~/Projects/envoy/envoy-xds-server/config/config.yaml
+name: z_config
+spec:
+  listeners:
+  - name: listener_0
+    address: 0.0.0.0
+    port: 9000
+    routes:
+    - name: echoroute
+      prefix: /
+      clusters:
+      - echo
+  clusters:
+  - name: echo
+    endpoints:
+    - address: 0.0.0.0
+      port: 9101
+    # - address: 0.0.0.0
+    #   port: 9102
+#+end_src
+
+and check the output in the tmate window, there is now only a single host being returned.
+* Envoy startup logs
+It is interesting to look at the logs that come at the start
+#+begin_example
+[2021-04-08 14:52:17.597][4171210][info][config] [external/envoy/source/server/configuration_impl.cc:125] loading tracing configuration
+[2021-04-08 14:52:17.597][4171210][info][config] [external/envoy/source/server/configuration_impl.cc:85] loading 0 static secret(s)
+[2021-04-08 14:52:17.597][4171210][info][config] [external/envoy/source/server/configuration_impl.cc:91] loading 1 cluster(s)
+[2021-04-08 14:52:17.602][4171210][info][config] [external/envoy/source/server/configuration_impl.cc:95] loading 0 listener(s)
+[2021-04-08 14:52:17.602][4171210][info][config] [external/envoy/source/server/configuration_impl.cc:107] loading stats configuration
+[2021-04-08 14:52:17.604][4171210][info][main] [external/envoy/source/server/server.cc:731] starting main dispatch loop
+[2021-04-08 14:52:32.603][4171210][info][runtime] [external/envoy/source/common/runtime/runtime_impl.cc:425] RTDS has finished initialization
+[2021-04-08 14:52:32.604][4171210][info][upstream] [external/envoy/source/common/upstream/cluster_manager_impl.cc:187] cm init: initializing cds
+[2021-04-08 14:52:32.604][4171210][warning][main] [external/envoy/source/server/server.cc:609] there is no configured limit to the number of allowed active connections. Set a limit via the runtime key overload.global_downstream_max_connections
+[2021-04-08 14:52:32.605][4171210][info][upstream] [external/envoy/source/common/upstream/cds_api_impl.cc:71] cds: add 1 cluster(s), remove 1 cluster(s)
+[2021-04-08 14:52:32.607][4171210][info][upstream] [external/envoy/source/common/upstream/cds_api_impl.cc:86] cds: add/update cluster 'echo'
+[2021-04-08 14:52:32.607][4171210][info][upstream] [external/envoy/source/common/upstream/cluster_manager_impl.cc:167] cm init: initializing secondary clusters
+[2021-04-08 14:52:32.609][4171210][info][upstream] [external/envoy/source/common/upstream/cluster_manager_impl.cc:191] cm init: all clusters initialized
+[2021-04-08 14:52:32.609][4171210][info][main] [external/envoy/source/server/server.cc:712] all clusters initialized. initializing init manager
+[2021-04-08 14:52:32.619][4171210][info][upstream] [external/envoy/source/server/lds_api.cc:79] lds: add/update listener 'listener_0'
+[2021-04-08 14:52:32.622][4171210][info][config] [external/envoy/source/server/listener_manager_impl.cc:888] all dependencies initialized. starting workers
+[2021-04-08 15:00:45.634][4171210][info][upstream] [external/envoy/source/common/upstream/cds_api_impl.cc:71] cds: add 1 cluster(s), remove 1 cluster(s)
+[2021-04-08 15:01:11.964][4171210][info][upstream] [external/envoy/source/common/upstream/cds_api_impl.cc:71] cds: add 1 cluster(s), remove 1 cluster(s)
+#+end_example
+
+In our bootstrap yaml, there is only one cluster, which is why the third line says ~loading 1 cluster(s)~
+This cluster is our management xDS cluster...and so you can then see envoy move through its DS'es.  the runtime discovery service finishes initialization and we move to the cluster discovery service, which we've told in our dynamic config section to listen to our management servicer.  Because of this the CDS then adds the cluster 'echo'.
+It moves through initializing all of the 'echo' cluster and then LDS gets started, and knows to start up ~listener_0~ which is bound to :9000.
+
+The last two lines show the effect of me adjusting the config file, when i removed and added endpoints to the ~echo~ cluster.

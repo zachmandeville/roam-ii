@@ -1,0 +1,45 @@
+#+title: Technical Summary from 6-4-21
+
+Thanks to [[file:20210408151345-riaan.org][Riaan]]
+
+- A control plane can choose the version it would return
+- Define the test harness to program the Control plane in a way that you know
+  what resources it would return.
+- Test harness is a contract between test infrastructure and the implementation.
+  + Qualifying resources ie. I have resource foo, and I am updating to bar
+  + Only if you set the resources you can make guarantees about what would be returned.
+  + If you have a system without those guard rails and resources are created
+    dynamically on the fly, then there is no contractual obligation where the
+    test can required to go back to a previous resource.
+
+- Test harness work both ways:
+    - One way you tell the service manager something or it can also tell you something
+      + ie. In an ACK/NACK sequence, it can report what was the last transaction
+       it has seen.
+    - This would be useful to track in order to assert properties correctly.
+
+The test harness should be flexible enough that it could be used in either
+direction. Then tell it how to respond in order for you to be able to probe
+either way for testing.
+
+Way to think about XDS servers:
+- They have a control plane and configuration plane
+- The testing must test the CONTROL PLANE and not the configuration plane
+- There is no notion of conformance for the configuration plane as it can be
+  created in multiple ways.
+
+Step up a configuration plane per test and focus on the control plane expectations and the configuration is part of the test harness framework:
+- Set up a very simple configuration
+  + The semantics of the configuration is largely irrelevant
+  + The aim is to understand how the control plane is serving up the requested resources.
+- Add the expectation to be able to sent and receive.
+
+Code example:
+    Code used in a gRCP++ implementation
+    RPC service on a gRCP
+    Fake ADS server used for e2e tests.
+    It can be used to set and unset resource versions
+    Can request resource by version and see how the client behaves
+
+Documents referenced:
+https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol.html?highlight=ack#ack
