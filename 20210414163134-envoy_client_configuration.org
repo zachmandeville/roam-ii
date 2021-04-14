@@ -1,0 +1,16 @@
+#+title: envoy client configuration
+
+#+begin_quote
+Currently, the client is expected to be given some local configuration that
+tells it how to obtain the Listener and Cluster resources. Listener resources
+may include a ConfigSource that indicates how the RouteConfiguration resources
+are obtained, and Cluster resources may include a ConfigSource that indicates
+how the ClusterLoadAssignment resources are obtained.
+#+end_quote
+- From [[https://www.envoyproxy.io/docs/envoy/v1.17.1/api-docs/xds_protocol#configuring-which-variant-to-use][xds protocol overview]]
+
+This is referring to a client communicating with a management server, that would
+have a listener and an assigned port. What is the shape of this client nad the
+config source?
+
+--- [[file:20210414163258-envoy_questions.org][envoy questions]] [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]

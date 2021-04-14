@@ -1,0 +1,14 @@
+#+title: go-control-plane example server
+
+
+This server will create a proxy listening at localhost:10000.  When you visit that page, you will be redirected to envoy proxy
+
+#+NAME: Start example server
+#+begin_example tmate :dir ~/Projects/envoy/go-control-plane
+make example
+#+end_example
+
+
+----
+
+[[file:20210415092218-go_control_plane.org][go control plane]]

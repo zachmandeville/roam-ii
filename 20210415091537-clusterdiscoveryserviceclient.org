@@ -1,0 +1,31 @@
+#+title: ClusterDiscoveryServiceClient
+
+as part of the go control plane, and the generated code from the .proto, it
+looks like the client has an interface to fetch or stream clusters, and these
+methods are already defined.
+
+[[file:~/Projects/envoy/go-control-plane/envoy/service/cluster/v3/cds.pb.go::type ClusterDiscoveryServiceClient interface {][clusterDiscoveryServiceClient]]
+
+In the example server, when it was created, it registered a number of service
+servers. Does this mean that when i create a client to communicate with this
+management server, i could expect it to be able to call fetchClusters, with no
+need to write the body of that function?
+
+#+begin_example go
+func registerServer(grpcServer *grpc.Server, server server.Server) {
+	// register services
+	discoverygrpc.RegisterAggregatedDiscoveryServiceServer(grpcServer, server)
+	endpointservice.RegisterEndpointDiscoveryServiceServer(grpcServer, server)
+	clusterservice.RegisterClusterDiscoveryServiceServer(grpcServer, server)
+	routeservice.RegisterRouteDiscoveryServiceServer(grpcServer, server)
+	listenerservice.RegisterListenerDiscoveryServiceServer(grpcServer, server)
+	secretservice.RegisterSecretDiscoveryServiceServer(grpcServer, server)
+	runtimeservice.RegisterRuntimeDiscoveryServiceServer(grpcServer, server)
+}
+
+#+end_example
+[[file:~/Projects/envoy/go-control-plane/internal/example/server.go::func registerServer(grpcServer *grpc.Server, server server.Server) {][source]]
+
+---
+
+[[file:20210414163258-envoy_questions.org][envoy questions]]

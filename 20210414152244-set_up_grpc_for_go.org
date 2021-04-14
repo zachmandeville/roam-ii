@@ -1,0 +1,314 @@
+#+title: set up gRPC for go
+
+* Setup go
+need at least 1.11, we'll be using 1.16
+#+begin_src shell
+go version
+#+end_src
+
+#+RESULTS:
+: go version go1.16.3 darwin/amd64
+
+* Install the ProtoBuf Compiler
+this is protoc
+#+begin_src shell
+protoc --version
+#+end_src
+
+#+RESULTS:
+: libprotoc 3.15.8
+* Install go plugins
+#+begin_src shell
+go get google.golang.org/protobuf/cmd/protoc-gen-go \
+       google.golang.org/grpc/cmd/protoc-gen-go-grpc
+#+end_src
+
+* Clone the grpc-go library
+
+#+begin_src shell :dir ~/Projects/grpc :results output
+git clone -b v1.35.0 https://github.com/grpc/grpc-go
+#+end_src
+#+begin_src shell :dir ~/Projects/grpc :results output
+tree -L 2 grpc-go
+#+end_src
+
+#+RESULTS:
+#+begin_example
+grpc-go
+├── AUTHORS
+├── CODE-OF-CONDUCT.md
+├── CONTRIBUTING.md
+├── Documentation
+│   ├── benchmark.md
+│   ├── compression.md
+│   ├── concurrency.md
+│   ├── encoding.md
+│   ├── grpc-auth-support.md
+│   ├── grpc-metadata.md
+│   ├── keepalive.md
+│   ├── log_levels.md
+│   ├── proxy.md
+│   ├── rpc-errors.md
+│   ├── server-reflection-tutorial.md
+│   └── versioning.md
+├── GOVERNANCE.md
+├── LICENSE
+├── MAINTAINERS.md
+├── Makefile
+├── README.md
+├── SECURITY.md
+├── attributes
+│   ├── attributes.go
+│   └── attributes_test.go
+├── backoff
+│   └── backoff.go
+├── backoff.go
+├── balancer
+│   ├── balancer.go
+│   ├── base
+│   ├── grpclb
+│   ├── rls
+│   ├── roundrobin
+│   └── weightedroundrobin
+├── balancer_conn_wrappers.go
+├── balancer_conn_wrappers_test.go
+├── balancer_switching_test.go
+├── benchmark
+│   ├── benchmain
+│   ├── benchmark.go
+│   ├── benchresult
+│   ├── client
+│   ├── flags
+│   ├── latency
+│   ├── primitives
+│   ├── run_bench.sh
+│   ├── server
+│   ├── stats
+│   └── worker
+├── binarylog
+│   ├── binarylog_end2end_test.go
+│   ├── grpc_binarylog_v1
+│   └── sink.go
+├── call.go
+├── call_test.go
+├── channelz
+│   ├── grpc_channelz_v1
+│   └── service
+├── clientconn.go
+├── clientconn_state_transition_test.go
+├── clientconn_test.go
+├── cmd
+│   └── protoc-gen-go-grpc
+├── codec.go
+├── codec_test.go
+├── codegen.sh
+├── codes
+│   ├── code_string.go
+│   ├── codes.go
+│   └── codes_test.go
+├── connectivity
+│   └── connectivity.go
+├── credentials
+│   ├── alts
+│   ├── credentials.go
+│   ├── credentials_test.go
+│   ├── go12.go
+│   ├── google
+│   ├── insecure
+│   ├── local
+│   ├── oauth
+│   ├── sts
+│   ├── tls
+│   ├── tls.go
+│   └── xds
+├── dialoptions.go
+├── doc.go
+├── encoding
+│   ├── encoding.go
+│   ├── gzip
+│   └── proto
+├── examples
+│   ├── README.md
+│   ├── data
+│   ├── examples_test.sh
+│   ├── features
+│   ├── go.mod
+│   ├── go.sum
+│   ├── gotutorial.md
+│   ├── helloworld
+│   └── route_guide
+├── go.mod
+├── go.sum
+├── grpc_test.go
+├── grpclog
+│   ├── component.go
+│   ├── glogger
+│   ├── grpclog.go
+│   ├── logger.go
+│   ├── loggerv2.go
+│   └── loggerv2_test.go
+├── health
+│   ├── client.go
+│   ├── client_test.go
+│   ├── grpc_health_v1
+│   ├── logging.go
+│   ├── server.go
+│   ├── server_internal_test.go
+│   └── server_test.go
+├── install_gae.sh
+├── interceptor.go
+├── internal
+│   ├── backoff
+│   ├── balancer
+│   ├── balancerload
+│   ├── binarylog
+│   ├── buffer
+│   ├── cache
+│   ├── channelz
+│   ├── credentials
+│   ├── envconfig
+│   ├── grpclog
+│   ├── grpcrand
+│   ├── grpcsync
+│   ├── grpctest
+│   ├── grpcutil
+│   ├── hierarchy
+│   ├── internal.go
+│   ├── leakcheck
+│   ├── metadata
+│   ├── profiling
+│   ├── proto
+│   ├── resolver
+│   ├── serviceconfig
+│   ├── status
+│   ├── stubserver
+│   ├── syscall
+│   ├── testutils
+│   ├── transport
+│   └── wrr
+├── interop
+│   ├── alts
+│   ├── client
+│   ├── fake_grpclb
+│   ├── grpc_testing
+│   ├── grpclb_fallback
+│   ├── http2
+│   ├── interop_test.sh
+│   ├── server
+│   ├── test_utils.go
+│   └── xds
+├── keepalive
+│   └── keepalive.go
+├── metadata
+│   ├── metadata.go
+│   └── metadata_test.go
+├── peer
+│   └── peer.go
+├── picker_wrapper.go
+├── picker_wrapper_test.go
+├── pickfirst.go
+├── pickfirst_test.go
+├── preloader.go
+├── profiling
+│   ├── cmd
+│   ├── profiling.go
+│   ├── proto
+│   └── service
+├── reflection
+│   ├── README.md
+│   ├── grpc_reflection_v1alpha
+│   ├── grpc_testing
+│   ├── grpc_testingv3
+│   ├── serverreflection.go
+│   └── serverreflection_test.go
+├── regenerate.sh
+├── resolver
+│   ├── dns
+│   ├── manual
+│   ├── passthrough
+│   └── resolver.go
+├── resolver_conn_wrapper.go
+├── resolver_conn_wrapper_test.go
+├── rpc_util.go
+├── rpc_util_test.go
+├── security
+│   ├── advancedtls
+│   └── authorization
+├── server.go
+├── server_test.go
+├── service_config.go
+├── service_config_test.go
+├── serviceconfig
+│   └── serviceconfig.go
+├── stats
+│   ├── handlers.go
+│   ├── stats.go
+│   └── stats_test.go
+├── status
+│   ├── status.go
+│   ├── status_ext_test.go
+│   └── status_test.go
+├── stream.go
+├── stress
+│   ├── client
+│   ├── grpc_testing
+│   └── metrics_client
+├── tap
+│   └── tap.go
+├── test
+│   ├── authority_test.go
+│   ├── balancer_test.go
+│   ├── bufconn
+│   ├── channelz_linux_go110_test.go
+│   ├── channelz_test.go
+│   ├── codec_perf
+│   ├── context_canceled_test.go
+│   ├── creds_test.go
+│   ├── end2end_test.go
+│   ├── go_vet
+│   ├── goaway_test.go
+│   ├── gracefulstop_test.go
+│   ├── grpc_testing
+│   ├── healthcheck_test.go
+│   ├── insecure_creds_test.go
+│   ├── kokoro
+│   ├── local_creds_test.go
+│   ├── logging.go
+│   ├── race.go
+│   ├── rawConnWrapper.go
+│   ├── resolver_test.go
+│   ├── retry_test.go
+│   ├── server_test.go
+│   ├── servertester.go
+│   ├── stream_cleanup_test.go
+│   └── tools
+├── testdata
+│   ├── README.md
+│   ├── ca.pem
+│   ├── server1.key
+│   ├── server1.pem
+│   ├── testdata.go
+│   └── x509
+├── trace.go
+├── trace_test.go
+├── version.go
+├── vet.sh
+└── xds
+    ├── go113.go
+    ├── internal
+    ├── server.go
+    ├── server_test.go
+    └── xds.go
+
+123 directories, 141 files
+#+end_example
+* Run the example
+#+NAME: Go Server
+#+begin_src tmate :dir ~/Projects/grpc/grpc-go/examples/helloworld :results output :window server
+go run greeter_server/main.go
+#+end_src
+
+#+RESULTS:
+: greeter_client
+: greeter_server
+: helloworld

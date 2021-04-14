@@ -1,0 +1,14 @@
+#+title: Determine Port in Use
+
+
+If a port is bound,a nd we wanna know the process that is listening on that port, here what we do!
+
+#+begin_src shell :var PORT=50051 :results raw
+netstat -anv | grep $PORT
+#+end_src
+
+#+RESULTS:
+tcp4       0      0  *.50051                *.*                    LISTEN      131072 131072      1      0 0x0180 0x00000006
+tcp6       0      0  *.50051                *.*                    LISTEN      131072 131072      1      0 0x0180 0x00000006
+
+We now know that the process is 1. that...don't seem right.

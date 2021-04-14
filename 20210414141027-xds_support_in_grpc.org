@@ -1,0 +1,5 @@
+#+title: xDS support in gRPC
+
+https://www.youtube.com/watch?v=IbcJ8kNmsrE
+
+Youtube video covering [[file:20210217092742-xds.org][xDS]] support in [[file:20210217094935-grpc.org][gRPC]], by [[file:20210316132831-mark_roth.org][Mark Roth]]
