@@ -193,7 +193,7 @@ that we are using the http connection manager to do the routing accordingly
 
 * Look into the file
 :PROPERTIES:
-:header-args: :tangle ~/Projects/envoy/envoy-xds-server/cmd/server2/main.go
+:header-args: :tangle ~/Projects/envoy/envoy-xds-server/cmd/server/main.go
 :END:
 
 To better understand ~cmd/server/main.go~, let's build it again!
@@ -205,6 +205,18 @@ this will be the main package and we are importing some tooling from our go-cont
 
 #+NAME:
 #+begin_src go
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
 package main
 
 import (

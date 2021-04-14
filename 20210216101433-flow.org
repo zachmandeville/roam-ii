@@ -15,8 +15,10 @@ tracking work here: [[file:20210406142209-build_your_own_envoy_control_plane.org
 Added here: [[file:20210408151331-technical_summary_from_6_4_21.org][Technical Summary from 6-4-21]]
 *** DONE explore constructing custom ADS server
 Tracking work here: [[file:20210408153819-go_control_plane_ads.org][go control plane ADS]]
-*** Ask for feedback on bootstrap yaml from slack team
+*** DONE Ask for feedback on bootstrap yaml from slack team
 I have something that works, but want their opinion on the bootstrap setup and all that.
+They said it looked ok, and that I could likely just use the demo server (though I am, with modifications).
+*** TODO Log resources sent, control resources sent for ACK NACK
 *** Test Case written for xDS
 ** APISnoop low-maintenance
 *** TODO Webapp uses ineligible-endpoints.yaml to gather its endpoints

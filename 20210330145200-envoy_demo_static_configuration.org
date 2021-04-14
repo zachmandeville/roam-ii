@@ -12,6 +12,7 @@ Since this is a static config, we'll just be outlining a list of static_resource
 
 So the basic structure of a config file is
 
+
 #+NAME: envoy configuration structure
 #+BEGIN_SRC yaml :tangle ~/Learning/envoy/configs/static-demo.yaml
 static_resources:

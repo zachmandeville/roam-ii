@@ -1,0 +1,7 @@
+#+title: xDS Conformance
+
+the property that holds when an xDS client or server implementation correctly
+implements the xDS protocol as defined by a set of test cases.
+
+---
+[[file:20210323093001-envoy_terminology.org][envoy terminology]]

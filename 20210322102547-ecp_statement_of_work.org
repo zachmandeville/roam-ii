@@ -43,15 +43,19 @@ in-house implementations.
 
 xDS is an evolved protocol and has tracked Envoy’s implementation needs. This
 strategy has been pragmatic but there are a number of challenges that have
-become apparent recently: xDS is only informally specified, with clarifications
-added as implementers encounter problems. xDS does not have a test suite. Often
-the smoketest for a management server implementation is “does it work with Envoy
-under a limited number of test cases?”. Often the only answer on what is the
-correct xDS behavior is to examine Envoy source code implementation, which
-changes over time and requires deep Envoy expertise to interpret. xDS complexity
-is growing. With features such as delta xDS, on-demand VHDS/SRDS and xDS
-federation, as well as the cross product of choices such as ADS, control plane
-authors struggle to understand what the correct behaviors should be.
+become apparent recently:
+- xDS is only informally specified, with clarifications added as implementers
+  encounter problems.
+- xDS does not have a test suite.
+- Often the smoketest for a management server implementation is “does it work
+  with Envoy under a limited number of test cases?”. Often the only answer on
+  what is the correct xDS behavior is to examine Envoy source code
+  implementation, which changes over time and requires deep Envoy expertise to
+  interpret.
+- xDS complexity is growing. With features such as delta xDS, on-demand
+  VHDS/SRDS and xDS federation, as well as the cross product of choices such as
+  ADS, control plane authors struggle to understand what the correct behaviors
+  should be.
 
 An xDS compliance test suite would provide the ability to validate xDS client
 and server implementations without needing to inspect Envoy source. A
@@ -59,26 +63,30 @@ sufficiently expansive test suite would also provide a statement of the intended
 xDS semantics.
 
 Discussion around an xDS test suite has started at
-https://github.com/envoyproxy/envoy/issues/11299. For the purpose of this SoW,
-we introduce some concepts: xDS conformance: the property that holds when an xDS
-client or server implementation correctly implements the xDS protocol as defined
-by a set of test cases. Test cases: a set of test cases in a to-be-defined
-syntax that describes intended xDS behavior. Test target: An xDS client or
-server implementation to be tested for xDS conformance. This may be just a
-library or a production binary, a test adapter provides a standard interface for
-testing. Test runner: A binary that acts as a gRPC/REST client (when testing xDS
-servers) or gRPC/REST server (when testing xDS clients). The test runner takes
-as input a set of test cases, applies them to the test target and reports back
-the status of the test cases. Test adapter: The test runner will interact with
-an adapter in order to setup necessary state and query state in the test target.
-For example, if the test target is a new control plane implementation and a test
-case wants to verify that requesting a LDS resource result in delivery of the
-LDS resource, the adapter would have an interface such as
-RegisterResource(..listener arg..) that allows the test runner to create the
-necessary listener resource in the test target prior to executing the test case.
-The test adapter will be either a standalone process or linked with the test
-target. The test runner will communicate with the test adapter via a gRPC
-interface.
+https://github.com/envoyproxy/envoy/issues/11299.
+
+For the purpose of this SoW, we introduce some concepts:
+- xDS conformance :: the property that holds when an xDS client or server
+  implementation correctly implements the xDS protocol as defined by a set of
+  test cases.
+- Test cases :: a set of test cases in a to-be-defined syntax that describes
+  intended xDS behavior.
+- Test target :: An xDS client or server implementation to be tested for xDS
+  conformance. This may be just a library or a production binary, a test adapter
+  provides a standard interface for testing.
+- Test runner :: A binary that acts as a gRPC/REST client (when testing xDS
+  servers) or gRPC/REST server (when testing xDS clients). The test runner takes
+  as input a set of test cases, applies them to the test target and reports back
+  the status of the test cases.
+- Test adapter :: The test runner will interact with an adapter in order to
+  setup necessary state and query state in the test target. For example, if the
+  test target is a new control plane implementation and a test case wants to
+  verify that requesting a LDS resource result in delivery of the LDS resource,
+  the adapter would have an interface such as RegisterResource(..listener arg..)
+  that allows the test runner to create the necessary listener resource in the
+  test target prior to executing the test case. The test adapter will be either
+  a standalone process or linked with the test target. The test runner will
+  communicate with the test adapter via a gRPC interface.
 
 We call the combination of test runner, test case syntax and adapter protocol
 the test framework. The combination of test framework and test cases constitute
@@ -86,15 +94,27 @@ the test suite.
 
 
 * Version 0.5 (MVP)
-Ultimately, the xDS test suite should have test cases that are representative of all possible xDS behavior, cover both client and server test targets, gRPC/REST/filesystem transport and not only verify the transport protocol but also the semantics of the data model by driving traffic through the test target. This is an ambitious goal, we limited v0.5 of the test suite to establishing the groundwork for this objective and achieving concrete wins on providing an xDS server compliance test suite, i.e. to building out a MVP.
+Ultimately, the xDS test suite should have test cases that are representative of
+all possible xDS behavior, cover both client and server test targets,
+gRPC/REST/filesystem transport and not only verify the transport protocol but
+also the semantics of the data model by driving traffic through the test target.
+This is an ambitious goal, we limited v0.5 of the test suite to establishing the
+groundwork for this objective and achieving concrete wins on providing an xDS
+server compliance test suite, i.e. to building out a MVP.
 ** Scope & requirements
 We restrict scope in this MVP SoW with:
-Test targets are limited to xDS server implementations (i.e. control planes).
-Test cases will only cover xDS transport protocol interactions. After a series of xDS interactions, correctness will be validated by comparing the delivered xDS resources, versions, etc. with those permitted by the test case. Test target state will be validated via adapter accessor methods and/or CSDS.
-The xDS transport is limited to ADS and gRPC.
-v3 xDS API only.
-Test cases need only cover CDS and EDS protocols (representative of the variety of protocols from a transport perspective).
-Test cases do not need to cover every aspect of xDS behavior but should be at least as complete as Envoy’s integration tests and the behaviors explicitly described in the specification.
+- Test targets are limited to xDS server implementations (i.e. control planes).
+- Test cases will only cover xDS transport protocol interactions. After a series
+  of xDS interactions, correctness will be validated by comparing the delivered
+  xDS resources, versions, etc. with those
+permitted by the test case.
+- Test target state will be validated via adapter accessor methods and/or CSDS.
+  The xDS transport is limited to ADS and gRPC. v3 xDS API only.
+- Test cases need only cover CDS and EDS protocols (representative of the
+  variety of protocols from a transport perspective). Test cases do not need to
+  cover every aspect of xDS behavior but should be at least as complete as
+  Envoy’s integration tests and the behaviors explicitly described in the
+  specification.
 
 The test framework implementation choices should not preclude later expansion in further SoWs or by the Envoy community to xDS client conformance testing, data plane behavior validation (xDS data model), non-ADS, on-demand, REST, other xDS protocols, etc.
 

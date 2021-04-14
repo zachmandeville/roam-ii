@@ -1,0 +1,5 @@
+#+title: Bus Booking Number, TAU->HAM
+
+5:30pm on Friday, 7th May, from Tauranga to Hamilton.
+Arrives at 7:30pm.
+1428848
