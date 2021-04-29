@@ -1,0 +1,331 @@
+#+title: example godog flow
+#+PROPERTY: header-args:shell+ :results output :dir ~/Learning/godog/godogs
+#+PROPERTY: header-args:cucumber+ :results output :dir ~/Learning/godog/godogs
+
+This is an org implementation of the [[roam:Godog]] repo [[https://github.com/cucumber/godog#examples][example]]
+
+* Setup a go module
+I will put it into my learning directory, for godog and initiate it as a go mod
+#+begin_src shell :dir ~/Learning
+mkdir -p godog/godogs
+cd godog/godogs
+go mod init godogs
+#+end_src
+
+So the dir should have a go.mod
+#+begin_src shell
+tree
+#+end_src
+
+#+RESULTS:
+: .
+: └── go.mod
+:
+: 0 directories, 1 file
+
+* Install godog
+
+I do this in the godogs directory
+#+begin_src shell
+go get github.com/cucumber/godog/cmd/godog
+#+end_src
+
+We should now have a go.sum indicating in the future to d/l godog for this mod to work.
+#+begin_src shell
+tree
+#+end_src
+
+#+RESULTS:
+: .
+: ├── go.mod
+: └── go.sum
+:
+: 0 directories, 2 files
+* Write our first feature
+The thing we are writing for is a hotdog cart to server godogs for lunch. a Virtual cart.
+
+So before any code, we describe the feature in plaintext.
+it will be saved in a features directory in godogs
+#+begin_src shell
+mkdir -p features
+#+end_src
+
+#+NAME: Initial Feature
+#+begin_src cucumber :tangle ~/Learning/godog/godogs/features/godogs.feature
+Feature: eat godogs
+  In order to be happy
+  As a hotdog conossieur
+  I need to be able to eat massive hotdogs
+
+  Scenario: eat 5 out of 12
+    Given there are 12 godogs
+    When I eat 5
+    Then there should be 7 remaining
+#+end_src
+
+our dir grows
+#+begin_src shell
+tree
+#+end_src
+
+#+RESULTS:
+: .
+: ├── features
+: │   └── godogs.feature
+: ├── go.mod
+: └── go.sum
+:
+: 1 directory, 3 files
+
+* Create godog step definitions
+godog expects all our step definitions and tests to be in our packages root
+directory, e.g. godogs.
+
+We can see our current tested status for our feature, having written just the
+plaintext file, by running godogs within that dir
+
+#+begin_src shell
+godog
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1;37mFeature:[0m eat godogs
+  In order to be happy
+  As a hotdog conossieur
+  I need to be able to eat massive hotdogs
+
+  [1;37mScenario:[0m eat 5 out of 12          [1;30m# features/godogs.feature:6[0m
+    [33mGiven[0m [33mthere are 12 godogs[0m
+    [33mWhen[0m [33mI eat 5[0m
+    [33mThen[0m [33mthere should be 7 remaining[0m
+
+1 scenarios ([33m1 undefined[0m)
+3 steps ([33m3 undefined[0m)
+359.411µs
+
+[33mYou can implement step definitions for undefined steps with these snippets:[0m
+[33m
+func iEat(arg1 int) error {
+	return godog.ErrPending
+}
+
+func thereAreGodogs(arg1 int) error {
+	return godog.ErrPending
+}
+
+func thereShouldBeRemaining(arg1 int) error {
+	return godog.ErrPending
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+	ctx.Step(`^I eat (\d+)$`, iEat)
+	ctx.Step(`^there are (\d+) godogs$`, thereAreGodogs)
+	ctx.Step(`^there should be (\d+) remaining$`, thereShouldBeRemaining)
+}
+[0m
+#+end_example
+
+this doesn't look that pretty, cos of unicodes, the key part for me is that the command is telling you the names and signatures of the functions to write to automate this feature
+
+#+begin_example
+You can implement step definitions for undefined steps with these snippets:
+
+func iEat(arg1 int) error {
+  return godog.ErrPending
+}
+
+func thereAreGodogs(arg1 int) error {
+  return godog.ErrPending
+}
+
+func thereShouldBeRemaining(arg1 int) error {
+  return godog.ErrPending
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+  ctx.Step(`^I eat (\d+)$`, iEat)
+  ctx.Step(`^there are (\d+) godogs$`, thereAreGodogs)
+  ctx.Step(`^there should be (\d+) remaining$`, thereShouldBeRemaining)
+}
+#+end_example
+
+So we can copy this right into a new go_test file
+
+#+NAME: Initial go_test
+#+begin_src go :notangle ~/Learning/godog/godogs/godogs_test.go
+package main
+
+import "github.com/cucumber/godog"
+
+func iEat(arg1 int) error {
+        return godog.ErrPending
+}
+
+func thereAreGodogs(arg1 int) error {
+        return godog.ErrPending
+}
+
+func thereShouldBeRemaining(arg1 int) error {
+        return godog.ErrPending
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+        ctx.Step(`^I eat (\d+)$`, iEat)
+        ctx.Step(`^there are (\d+) godogs$`, thereAreGodogs)
+        ctx.Step(`^there should be (\d+) remaining$`, thereShouldBeRemaining)
+}
+#+end_src
+
+Our package grows
+#+begin_src shell
+tree
+#+end_src
+
+#+RESULTS:
+: .
+: ├── features
+: │   └── godogs.feature
+: ├── go.mod
+: ├── go.sum
+: └── godogs_test.go
+:
+: 1 directory, 4 files
+
+And we can now see, when we run godog, each step pointing to a line in a file
+
+#+begin_src shell
+godog
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Feature: eat godogs
+  In order to be happy
+  As a hotdog conossieur
+  I need to be able to eat massive hotdogs
+
+  Scenario: eat 5 out of 12          # features/godogs.feature:6
+    Given there are 12 godogs        # godogs_test.go:10 -> thereAreGodogs
+      TODO: write pending definition
+    When I eat 5                     # godogs_test.go:6 -> iEat
+    Then there should be 7 remaining # godogs_test.go:14 -> thereShouldBeRemaining
+
+1 scenarios (1 pending)
+3 steps (1 pending, 2 skipped)
+233.123µs
+#+end_example
+
+It even adds a TODO for me, nice!
+* Create the main program to test
+With the outline in place, we make sure our program matches our test and documentation.
+
+We will start with a simple number, the number of godogs.
+
+#+NAME: Initial Program
+#+begin_src go :tangle ~/Learning/godog/godogs/godogs.go
+package main
+
+var Godogs int
+
+func main () {}
+#+end_src
+
+and it grows
+
+#+begin_src shell
+tree
+#+end_src
+
+#+RESULTS:
+: .
+: ├── features
+: │   └── godogs.feature
+: ├── go.mod
+: ├── go.sum
+: ├── godogs.go
+: └── godogs_test.go
+:
+: 1 directory, 5 files
+
+notice the underscore for the test and how it builds off the name of the main
+program, and how the features/ file shares the same name.
+
+* Add logic to test definitions
+
+We flesh out our test to ensure it passes.  This example confuses me to be honest, as I don't understand what the point of the godog.go file is.  I need to better understand go testing i think.
+
+#+NAME: Logical godogs_test
+#+begin_src go :tangle ~/Learning/godog/godogs/godogs_test.go
+package main
+
+import (
+    "fmt"
+
+    "github.com/cucumber/godog"
+)
+
+func thereAreGodogs(available int) error {
+    Godogs = available
+    return nil
+}
+
+func iEat(num int) error {
+    if Godogs < num {
+        return fmt.Errorf("you cannot eat %d godogs, there are %d available", num, Godogs)
+    }
+    Godogs -= num
+    return nil
+}
+
+func thereShouldBeRemaining(remaining int) error {
+    if Godogs != remaining {
+        return fmt.Errorf("expected %d godogs to be remaining, but there is %d", remaining, Godogs)
+    }
+    return nil
+}
+
+func InitializeTestSuite(ctx *godog.TestSuiteContext) {
+    ctx.BeforeSuite(func() { Godogs = 0 })
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+    ctx.BeforeScenario(func(*godog.Scenario) {
+        Godogs = 0 // clean the state before every scenario
+    })
+
+    ctx.Step(`^there are (\d+) godogs$`, thereAreGodogs)
+    ctx.Step(`^I eat (\d+)$`, iEat)
+    ctx.Step(`^there should be (\d+) remaining$`, thereShouldBeRemaining)
+}
+#+end_src
+
+And now, when we run godog, the tests will pass
+
+#+begin_src shell
+godog
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Feature: eat godogs
+  In order to be happy
+  As a hotdog conossieur
+  I need to be able to eat massive hotdogs
+
+  Scenario: eat 5 out of 12          # features/godogs.feature:6
+    Given there are 12 godogs        # godogs_test.go:10 -> thereAreGodogs
+    When I eat 5                     # godogs_test.go:14 -> iEat
+    Then there should be 7 remaining # godogs_test.go:22 -> thereShouldBeRemaining
+
+1 scenarios (1 passed)
+3 steps (3 passed)
+253.862µs
+#+end_example
+
+* Conclusion
+A nice example, but still kinda unclear to me!  There is another article https://semaphoreci.com/community/tutorials/how-to-use-godog-for-behavior-driven-development-in-go
+that i will look into more to round it out.
+
+Am not sure how the suite part at the end is meant ot be implemented...how much
+is magic and how much i write.

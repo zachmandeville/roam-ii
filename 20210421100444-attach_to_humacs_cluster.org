@@ -1,0 +1,12 @@
+#+title: attach to humacs cluster
+
+
+quick way to bypass fucking tmate
+
+#+begin_src
+ssh -tA ii@zachmandeville.pair.sharing.io kubectl exec -n zachmandeville zachmandeville-humacs-0 -it -- tmate -S /tmp/ii.default.target.iisocket at
+#+end_src
+
+
+---
+[[file:20210318134402-til.org][til]]

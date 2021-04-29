@@ -1,0 +1,597 @@
+# -*- WORKDIR: "~/Learning/godog/basket-case/" -*-
+
+#+title: second godog tutorial
+#+PROPERTY: header-args:shell :dir ~/Learning/godog/basket-case :results output
+#+PROPERTY: header-args :noweb yes
+
+#+NAME:
+#+begin_src elisp
+(work+ "fun")
+#+end_src
+
+I started learning [[file:20210427132238-godog.org][Godog]] with the [[file:20210427141520-example_godog_flow.org][example godog flow]]. It was good, but
+glossed over how this actually functioned in a go project.
+
+They recommend a tutorial from semaphore ci: [[https://semaphoreci.com/community/tutorials/how-to-use-godog-for-behavior-driven-development-in-go][how to use godog for bdd in Go]]
+
+I will work through that tutorial in this doc.
+
+The tutorial starts with a basket feature and then has a bunch of stuff about
+lightsabers. I am going to adjust this to be not such a normie nerd.
+
+* Get setup
+As in our first example we need a directory set as a go module, with godog get'ed into it.
+Ours will be in our Learning/godog section, entitled ~basket-case~
+
+#+NAME: Setup Basket Case
+#+begin_src shell :dir ~/Learning/godog :async
+mkdir -p basket-case/features
+cd basket-case
+go mod init basket-case
+go get github.com/cucumber/godog/cmd/godog
+#+end_src
+
+
+So the basic package structure looks like so:
+#+begin_src shell :dir (workdir+ "")
+tree
+#+end_src
+
+#+RESULTS:
+: .
+: ├── features
+: ├── go.mod
+: └── go.sum
+:
+: 1 directory, 2 files
+
+* Write up our Feature
+
+This is a basket that can take different items and and pay different costs for delivery.
+
+#+NAME: Basket Feature
+#+begin_src feature :tangle (workdir+ "features/basket.feature")
+Feature: Product basket
+  In order to buy products
+  as a customer
+  I need to be able to put interesting products in a basket.
+
+  Rules:
+  - VAT is 20%
+  - Delivery for basket under $10 is $3
+  - Delivery for basket over $10 is $2
+
+  Scenario: Buying two products over $10
+    Given there is a "hanging plant", which costs $10
+    And there is a "protea", which costs $5
+    When I add the "hanging plant" to the basket
+    And I add the "protea" to the basket
+    Then I should have 2 products in the basket
+    And the overall basket price should be $20
+#+end_src
+
+* Check it out in godog
+We should see steps created, but no tests implemented...but with some helper functions for these tests.
+
+#+begin_src shell
+godog
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Feature: Product basket
+  In order to buy products
+  as a customer
+  I need to be able to put interesting products in a basket.
+
+  Rules:
+  - VAT is 20%
+  - Delivery for basket under $10 is $3
+  - Delivery for basket over $10 is $2
+
+  Scenario: Buying two products over $10              # features/basket.feature:11
+    Given there is a "hanging plant", which costs $10
+    And there is a "protea", which costs $5
+    When I add the "hanging plant" to the basket
+    And I add the "protea" to the basket
+    Then I should have 2 products in the basket
+    And the overall basket price should be $20
+
+1 scenarios (1 undefined)
+6 steps (6 undefined)
+491.085µs
+
+You can implement step definitions for undefined steps with these snippets:
+
+func iAddTheToTheBasket(arg1 string) error {
+	return godog.ErrPending
+}
+
+func iShouldHaveProductsInTheBasket(arg1 int) error {
+	return godog.ErrPending
+}
+
+func theOverallBasketPriceShouldBe(arg1 int) error {
+	return godog.ErrPending
+}
+
+func thereIsAWhichCosts(arg1 string, arg2 int) error {
+	return godog.ErrPending
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+	ctx.Step(`^I add the "([^"]*)" to the basket$`, iAddTheToTheBasket)
+	ctx.Step(`^I should have (\d+) products in the basket$`, iShouldHaveProductsInTheBasket)
+	ctx.Step(`^the overall basket price should be \$(\d+)$`, theOverallBasketPriceShouldBe)
+	ctx.Step(`^there is a "([^"]*)", which costs \$(\d+)$`, thereIsAWhichCosts)
+}
+
+#+end_example
+
+* Write initial test file
+This is just the output they give us now in basket_test.go
+#+NAME: Basket test, v1
+#+begin_src go :notangle (workdir+ "basket_test.go")
+package main
+import (
+	"github.com/cucumber/godog"
+)
+
+func iAddTheToTheBasket(arg1 string) error {
+	return godog.ErrPending
+}
+
+func iShouldHaveProductsInTheBasket(arg1 int) error {
+	return godog.ErrPending
+}
+
+func theOverallBasketPriceShouldBe(arg1 int) error {
+	return godog.ErrPending
+}
+
+func thereIsAWhichCosts(arg1 string, arg2 int) error {
+	return godog.ErrPending
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+	ctx.Step(`^I add the "([^"]*)" to the basket$`, iAddTheToTheBasket)
+	ctx.Step(`^I should have (\d+) products in the basket$`, iShouldHaveProductsInTheBasket)
+	ctx.Step(`^the overall basket price should be \$(\d+)$`, theOverallBasketPriceShouldBe)
+	ctx.Step(`^there is a "([^"]*)", which costs \$(\d+)$`, thereIsAWhichCosts)
+}
+#+end_src
+* Run godog again
+Now all our steps in the feature file are associated to particular functions.
+
+#+begin_src shell
+godog
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Feature: Product basket
+  In order to buy products
+  as a customer
+  I need to be able to put interesting products in a basket.
+
+  Rules:
+  - VAT is 20%
+  - Delivery for basket under $10 is $3
+  - Delivery for basket over $10 is $2
+
+  Scenario: Buying two products over $10              # features/basket.feature:11
+    Given there is a "hanging plant", which costs $10 # basket_test.go:19 -> thereIsAWhichCosts
+      TODO: write pending definition
+    And there is a "protea", which costs $5           # basket_test.go:19 -> thereIsAWhichCosts
+    When I add the "hanging plant" to the basket      # basket_test.go:7 -> iAddTheToTheBasket
+    And I add the "protea" to the basket              # basket_test.go:7 -> iAddTheToTheBasket
+    Then I should have 2 products in the basket       # basket_test.go:11 -> iShouldHaveProductsInTheBasket
+    And the overall basket price should be $20        # basket_test.go:15 -> theOverallBasketPriceShouldBe
+
+1 scenarios (1 pending)
+6 steps (1 pending, 5 skipped)
+1.403295ms
+#+end_example
+
+So now we have our feature with each section annotated to a function.
+* Refactoring
+There are two core concepts in this scenario:
+- the shelf in which the items are held
+- the basket where we place them
+
+Above this is the even more general concept of what we're doing: shopping.
+
+So we'll add a struct to the top of our test file, for shopping, and have all functions methods of this struct.
+
+We'll further iterate by adding the correct functions for shelfs and baskets.
+
+#+begin_quote
+Then, we need to instantiate a new instance of it in featureContext, so that it’s accessible. We’ll do that by adding sb := &shopping{} as the first line of featureContext.
+
+As we’ll be using this object throughout the tests, it makes sense to convert the test functions to methods on the shopping struct. The result will look like the following:
+#+end_quote
+
+#+NAME: Basket test, v2
+#+begin_src go :notangle (workdir+ "basket_test.go")
+
+package main
+import (
+	"github.com/cucumber/godog"
+)
+
+type shopping struct {}
+
+
+func (sh *shopping) thereIsAWhichCosts(arg1 string, arg2 int) error {
+	return godog.ErrPending
+}
+
+func (sh *shopping) iAddTheToTheBasket(arg1 string) error {
+	return godog.ErrPending
+}
+
+func (sh *shopping) iShouldHaveProductsInTheBasket(arg1 int) error {
+	return godog.ErrPending
+}
+
+func (sh *shopping) theOverallBasketPriceShouldBe(arg1 int) error {
+	return godog.ErrPending
+}
+
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+	sh := &shopping{}
+
+	ctx.Step(`^there is a "([^"]*)", which costs \$(\d+)$`, sh.thereIsAWhichCosts)
+	ctx.Step(`^I add the "([^"]*)" to the basket$`, sh.iAddTheToTheBasket)
+	ctx.Step(`^I should have (\d+) products in the basket$`, sh.iShouldHaveProductsInTheBasket)
+	ctx.Step(`^the overall basket price should be \$(\d+)$`, sh.theOverallBasketPriceShouldBe)
+}
+#+end_src
+
+#+begin_src shell
+godog
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Feature: Product basket
+  In order to buy products
+  as a customer
+  I need to be able to put interesting products in a basket.
+
+  Rules:
+  - VAT is 20%
+  - Delivery for basket under $10 is $3
+  - Delivery for basket over $10 is $2
+
+  Scenario: Buying two products over $10              # features/basket.feature:11
+    Given there is a "hanging plant", which costs $10 # basket_test.go:9 -> *shopping
+      TODO: write pending definition
+    And there is a "protea", which costs $5           # basket_test.go:9 -> *shopping
+    When I add the "hanging plant" to the basket      # basket_test.go:13 -> *shopping
+    And I add the "protea" to the basket              # basket_test.go:13 -> *shopping
+    Then I should have 2 products in the basket       # basket_test.go:17 -> *shopping
+    And the overall basket price should be $20        # basket_test.go:21 -> *shopping
+
+1 scenarios (1 pending)
+6 steps (1 pending, 5 skipped)
+906.86µs
+#+end_example
+
+* Add a shelf
+
+In the first two steps, there is a /thing/ that exists with a /cost/. But we
+aren't indicating /where/ this exists. In the tutorial, then, it recommends that
+you have these steps be mapped to a shelf.addProduct function, so that when we
+say "there is a thing", we are actually adding it to a shelf, and so when we buy
+a thing, we are moving it from the shelf to the basket. ---
+
+To do this, we want to create a shelf file that will have the functions we want
+there. This is nice, to me, as we are now using the go code as part of the go
+test.
+
+That function will look like so
+
+#+NAME: addProduct function
+#+begin_src go
+func (s *shopping) addProduct (product string, price float64)  (err error) {
+	s.shelf.AddProduct(product, price);
+	return
+}
+#+end_src
+
+And the updated context step would be
+
+#+NAME: addProduct step
+#+begin_src go
+ctx.Step(`^there is a "([^"]*)", which costs \$(\d+)$`, sh.addProduct)
+#+end_src
+
+In the addProduct function definition we are referencing a shelf, that has an
+addProduct method. So our shopping struct will need a shelf within it, and this
+shelf should have its own type of structure too. We'll define the shelf, then,
+in its own file
+
+#+NAME: Shelf
+#+begin_src go :tangle (workdir+ "shelf.go")
+package main
+
+// NewShelf instantiates a new shelf object
+func NewShelf()  *Shelf {
+	return &Shelf {
+	products: make(map[string]float64),
+	}
+}
+
+// Shelf stores a list of products which are available for purchase
+type Shelf struct {
+	products map[string]float64
+}
+#+end_src
+
+We then adjust the test and scenario context. First, we update our definition of
+a shopping struct, so that it includes a shelf.
+
+#+NAME: shopping struct with shelf
+#+begin_src go
+type shopping struct {
+	shelf *Shelf
+}
+#+end_src
+
+Then, we add a hook before the scenario is run, that instantiates a shelf for
+our shopping struct (using that shelf.go code we wrote).
+
+
+#+NAME: BeforeScenario, initialize shelf
+#+begin_src go
+ctx.BeforeScenario( func(sc *godog.Scenario) {
+	sh.shelf = NewShelf();
+})
+#+end_src
+
+and add in our new, improved, addProduct function to the steps.
+
+So the total v3, with changes, would be.
+
+#+NAME: Basket test, v3
+#+begin_src go :notangle (workdir+ "basket_test.go")
+package main
+import (
+	"github.com/cucumber/godog"
+)
+
+<<shopping struct with shelf>>
+
+<<addProduct function>>
+
+func (sh *shopping) iAddTheToTheBasket(arg1 string) error {
+	return godog.ErrPending
+}
+
+func (sh *shopping) iShouldHaveProductsInTheBasket(arg1 int) error {
+	return godog.ErrPending
+}
+
+func (sh *shopping) theOverallBasketPriceShouldBe(arg1 int) error {
+	return godog.ErrPending
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+	sh := &shopping{}
+
+	<<BeforeScenario, initialize shelf>>
+
+  <<addProduct step>>
+	ctx.Step(`^I add the "([^"]*)" to the basket$`, sh.iAddTheToTheBasket)
+	ctx.Step(`^I should have (\d+) products in the basket$`, sh.iShouldHaveProductsInTheBasket)
+	ctx.Step(`^the overall basket price should be \$(\d+)$`, sh.theOverallBasketPriceShouldBe)
+}
+#+end_src
+
+We can run godog again, and will get an error about addProduct not existing for our shelf type.  So let's add it!
+
+* Add addProduct to our shelf
+The function is simple, just adding a new key:value to our shelf map.
+
+#+NAME: shelf addProduct
+#+begin_src go :tangle (workdir+ "shelf.go")
+func (s *Shelf) AddProduct(product string, price float64) {
+  s.products[product] = price
+}
+#+end_src
+
+Let's try godog again
+
+#+begin_src shell
+godog
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Feature: Product basket
+  In order to buy products
+  as a customer
+  I need to be able to put interesting products in a basket.
+
+  Rules:
+  - VAT is 20%
+  - Delivery for basket under $10 is $3
+  - Delivery for basket over $10 is $2
+
+  Scenario: Buying two products over $10              # features/basket.feature:11
+    Given there is a "hanging plant", which costs $10 # basket_test.go:10 -> *shopping
+    And there is a "protea", which costs $5           # basket_test.go:10 -> *shopping
+    When I add the "hanging plant" to the basket      # basket_test.go:15 -> *shopping
+      TODO: write pending definition
+    And I add the "protea" to the basket              # basket_test.go:15 -> *shopping
+    Then I should have 2 products in the basket       # basket_test.go:19 -> *shopping
+    And the overall basket price should be $20        # basket_test.go:23 -> *shopping
+
+1 scenarios (1 pending)
+6 steps (2 passed, 1 pending, 3 skipped)
+676.097µs
+#+end_example
+
+Heck yah! First test passed. I like how godog's cli shows us the progress
+through the moving pending todo and the colour-coding.
+
+Our first two steps are black, and passed, yellow is what we work on next, and green is on the way.
+
+* Work on adding to the basket
+
+Adding items to the basket will work similar, near identical, to adding them to the shelf.
+** Update our struct
+The shopping struct in our test should extend to now hhave a basket
+
+#+NAME: shopping struct with basket
+#+begin_src go
+type shopping struct {
+	shelf *Shelf
+	basket *Basket
+}
+#+end_src
+** Update iAddToTheBasket definition
+We can adjust `iAddTotheBasket` definition to now call a method on our basket, which we'll define soon
+
+#+NAME: iAddToTheBasket, v2
+#+begin_src go
+
+func (sh *shopping) iAddToTheBasket (product string) (err error) {
+	sh.basket.AddToBasket(product, sh.shelf.GetProductPrice(product));
+	return
+}
+#+end_src
+
+So we aren't doing any stock management, it's an infinite shelf, but we are consulting our shelf map to get the product price and not defining it again.
+
+** Add a Basket
+
+This will work just like shelf
+
+#+NAME: Basket
+#+begin_src go :tangle (workdir+ "basket.go")
+package main
+
+func NewBasket() *Basket {
+	return &Basket {
+		products: make(map[string]float64),
+	}
+}
+
+type Basket struct {
+	products map[string]float64
+}
+#+end_src
+
+In our test we mention a basket method (AddItem), let's add it now
+
+#+begin_src go :tangle (workdir+ "basket.go")
+func (b *Basket) AddToBasket (product string, price float64) {
+	b.products[product] = price
+}
+#+end_src
+
+** add GetProductPrice definition
+
+This is the other new method we mentioned in the test file, adding to our Shelf type
+
+#+NAME: GetProductPrice
+#+begin_src go :tangle (workdir+ "shelf.go")
+func (s *Shelf) GetProductPrice(product string) float64 {
+	return s.products[product]
+}
+#+end_src
+
+** update context in test
+
+lastly, we update our shopping struct using a similar BeforeScenario hook.
+
+#+NAME: BeforeScenario, add basket
+#+begin_src go
+ctx.BeforeScenario( func(sc *godog.Scenario) {
+	sh.basket = NewBasket();
+})
+#+end_src
+
+* Marvel and run
+So v4 of our test should look like so
+
+#+NAME: Basket test, v4
+#+begin_src go :tangle (workdir+ "basket_test.go")
+package main
+import (
+	"github.com/cucumber/godog"
+)
+
+<<shopping struct with basket>>
+
+func (s *shopping) addProduct (product string, price float64)  (err error) {
+	s.shelf.AddProduct(product, price);
+	return
+}
+
+<<iAddToTheBasket, v2>>
+
+func (sh *shopping) iShouldHaveProductsInTheBasket(arg1 int) error {
+	return godog.ErrPending
+}
+
+func (sh *shopping) theOverallBasketPriceShouldBe(arg1 int) error {
+	return godog.ErrPending
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+	sh := &shopping{}
+
+	ctx.BeforeScenario( func(sc *godog.Scenario) {
+    sh.shelf = NewShelf();
+	})
+
+	<<BeforeScenario, add basket>>
+
+	ctx.Step(`^there is a "([^"]*)", which costs \$(\d+)$`, sh.addProduct)
+	ctx.Step(`^I add the "([^"]*)" to the basket$`, sh.iAddToTheBasket)
+	ctx.Step(`^I should have (\d+) products in the basket$`, sh.iShouldHaveProductsInTheBasket)
+	ctx.Step(`^the overall basket price should be \$(\d+)$`, sh.theOverallBasketPriceShouldBe)
+}
+#+end_src
+
+With this all set, we should now be able to get an update godog
+
+#+begin_src shell
+godog
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Feature: Product basket
+  In order to buy products
+  as a customer
+  I need to be able to put interesting products in a basket.
+
+  Rules:
+  - VAT is 20%
+  - Delivery for basket under $10 is $3
+  - Delivery for basket over $10 is $2
+
+  Scenario: Buying two products over $10              # features/basket.feature:11
+    Given there is a "hanging plant", which costs $10 # basket_test.go:11 -> *shopping
+    And there is a "protea", which costs $5           # basket_test.go:11 -> *shopping
+    When I add the "hanging plant" to the basket      # basket_test.go:17 -> *shopping
+    And I add the "protea" to the basket              # basket_test.go:17 -> *shopping
+    Then I should have 2 products in the basket       # basket_test.go:22 -> *shopping
+      TODO: write pending definition
+    And the overall basket price should be $20        # basket_test.go:26 -> *shopping
+
+1 scenarios (1 passed, 1 pending)
+6 steps (4 passed, 1 pending, 1 skipped)
+1.432179ms
+#+end_example
+
+Great!  We moving through.
+
+* Add our "there shoudl be two products" step
+
+- [[file:20210414140102-xds_conformance.org][xDS Conformance]]

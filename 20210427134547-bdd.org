@@ -1,0 +1,15 @@
+#+title: BDD
+
+Behaviour Driven Development
+https://cucumber.io/docs/bdd/
+* Three Steps
+** Discovery
+First, take a small upcoming change to the system – a User Story – and talk
+about concrete examples of the new functionality to explore, discover and agree
+on the details of what’s expected to be done.
+** Formulation
+Next, document those examples in a way that can be automated, and check for
+agreement.
+** Automation
+Finally, implement the behaviour described by each documented example, starting
+with an automated test to guide the development of the code.

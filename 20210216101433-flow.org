@@ -18,16 +18,51 @@ Tracking work here: [[file:20210408153819-go_control_plane_ads.org][go control p
 *** DONE Ask for feedback on bootstrap yaml from slack team
 I have something that works, but want their opinion on the bootstrap setup and all that.
 They said it looked ok, and that I could likely just use the demo server (though I am, with modifications).
-*** TODO Log resources sent, control resources sent for ACK NACK
-*** Test Case written for xDS
+*** DONE [100%] Log resources sent, control resources sent for ACK NACK
+**** [X] Move through grpc example to ensure understanding of biridectional stream
+I am using the clusterDiscoveryService, which in the generated go-control-plane creates a bidirectional stream.
+So I want to enusre I understand what this looks like for the client, to make sure I am am implementing it correctly.
+I am following the [[file:~/Learning/grpc/route_guide/README.md][file:~/Learning/grpc/route_guide/README.md]]
+**** [X] Setup bidirectional streaming client with clusterDiscoveryService
+*** DONE Envoy: Update initiral-request.org to match Adi's staement
+*** DONE Write up documentation on bi-directional streaming client
+DEADLINE: <2021-04-22 Thu>
+*** DONE Create file for operating test cases
+DEADLINE: <2021-04-22 Thu>
+*** DONE Review and update OKR file
+DEADLINE: <2021-04-22 Thu>
+*** TODO [33%] Look into godog
+DEADLINE: <2021-04-23 Fri>
+**** [X] Move through godog tutorial
+tracked here: [[file:20210427141520-example_godog_flow.org][example godog flow]]
+**** [ ] Move through supplementary tutorial
+**** [ ] Write discoveryRequest/Response test scenarios
+
+*** DONE Meet with Adi
+DEADLINE: <2021-04-23 Fri>
+*** DONE Ensure I understand endpoints vs. clusters
+as per adi's comment
+it's not so much about the endpoint, as the endpoint discovery service, which is to say that for a cluste,r you don't need to statically define where its endpoints are, instead youc an point it to an endpoint discovery service.  this service would work with the names of clusters and various locales to say which endpoints should route which requests.  So it's about increasing the dynamic configuration, and spreading the responsibility (you have a server for managing the cluste,r you have a server for managing the endpoints, etc.)
+*** DONE Make sure agenda is set for Tomorrow
+*** DONE Make sure Meeting is regularly schedules for envoy-checkin
+*** DONE Test Case written for xDS
+*** TODO Link CDS page to Cluster Discovery Service Page
+*** Find good example of an xDS page, to model the others from
+listener discovery service?
+*** TODO Add additional details for Endpoint Discovery Service
+Model it after something like Cluster Discovery Service or currently more
+*** Blogpost around envoy admin interface?
 ** APISnoop low-maintenance
-*** TODO Webapp uses ineligible-endpoints.yaml to gather its endpoints
-*** ineligible endpoints removed from database
-*** releases on web app update near-automatically
-*** releases on db update near-automatically
+*** DONE Webapp uses ineligible-endpoints.yaml to gather its endpoints
+*** DONE ineligible endpoints removed from database
+*** DONE releases on web app update near-automatically
+*** DONE releases on db update near-automatically
+*** DONE Add Conformance Filter on sunburst
+a check box that says "show conformance eligible endpoints only"
+upon click, zoom in that sunburst.
 *** swagger.json created for 1.0 > 1.4
 ** TODO [#A] Kubecon Performance
-*** Attend and answer Q's for kubecon
+*** TODO Attend and answer Q's for kubecon
 SCHEDULED: <2021-05-06 Thu 21:30>
 ** NCW
 *** DONE Attend Contribex Meeting

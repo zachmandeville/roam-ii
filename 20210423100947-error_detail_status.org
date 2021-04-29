@@ -1,0 +1,19 @@
+#+title: error detail status
+
+
+For a NACK discoveryRequest you include an error detail, which should follow this type of status (though can really be anything);
+
+https://cloud.google.com/natural-language/docs/reference/rpc/google.rpc#status
+
+----
+[[file:20210216102259-envoy_proxy.org][- tags :: xDS roam:gRPC]]
+
+https://sourcegraph.com/github.com/envoyproxy/envoy/-/blob/api/envoy/config/cluster/v3/cluster.proto#L46:1
+Adi Peleg10:14 AM
+https://sourcegraph.com/github.com/envoyproxy/envoy@048f3b85135ddcf1053924dda6b5a186bf471938/-/blob/api/envoy/config/endpoint/v3/endpoint.proto#L33:9
+You10:21 AM
+https://www.envoyproxy.io/docs/envoy/v1.17.1/start/quick-start/configuration-static#clusters
+Adi Peleg10:22 AM
+https://docs.google.com/document/d/1otq0QDmxM1nMUGflhmovJnBp1T8Njk6rNCjrQeX8OyY/edit
+You10:25 AM
+https://github.com/envoyproxy/go-control-plane/blob/main/sample/bootstrap-xds.yaml

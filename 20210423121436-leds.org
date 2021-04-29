@@ -1,0 +1,12 @@
+#+title: LEDS
+
+
+Locale Endpint Discovery Service.
+
+This is proto, not a part of DS yet, but a good example of an [[file:20210322141650-eds.org][EDS]] request.
+
+In it you can see that the cluster youa rre asking for has endpoints whose configured with EDS, so you then do an EDS request for cluster names, and get the load balancing assignment back.
+
+
+----
+- tags :: [[file:20210217092742-xds.org][xDS]] [[file:20210322140209-xds_api.org][xDS API]] [[file:20210216102259-envoy_proxy.org][Envoy Proxy]]

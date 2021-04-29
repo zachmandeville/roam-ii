@@ -1,0 +1,103 @@
+#+title: xDS test runner prototype
+
+The goal of this is to have a client that I can confirm is talking to an xDS
+management server.
+
+As [[file:20210217092742-xds.org][xDS]] is using the [[file:20210217094935-grpc.org][gRPC]] protocol, my client will also be a [[file:20210217094935-grpc.org][gRPC]]
+client.
+
+I will iterate on this to have it be closer to an envoy client, or to have it
+easier to take in a set of test cases.
+
+For now, we simply want to send it a discoveryRequest and get a
+discoveryResponse back
+
+* Materials
+
+for the xDS server, I will be using the [[file:20210415092218-go_control_plane.org][go control plane]], specifically the
+[[file:20210415092120-go_control_plane_example_server.org][go-control-plane example server]] Using the make instructions in its readme, I will get
+the server up along with an envoy.
+
+For the client, this will be handbuilt using a [[file:~/Projects/envoy/go-control-plane/pkg/integration/ttl_integration_test.go][go control plane integration test]]
+as a starting point, hacking it to get what I want.
+
+For this, the envoy isn't necessary, but comes in the package of our example
+server.
+
+* Basic Flow
+
+#+begin_src dot :file testrunner-flow.png :cmdline -Kdot -Tpng
+digraph G {
+  go_control_plane [shape=box];
+  test_prototype;
+  envoy [shape=diamond];
+  go_control_plane -> test_prototype -> go_control_plane;
+ go_control_plane -> envoy -> go_control_plane;
+}
+#+end_src
+
+#+RESULTS:
+[[file:testrunner-flow.png]]
+
+Success will be: when we start up tester-prototype, we will see:
+: sending discoveryREquest: $discoveryRequest
+and then:
+: received this discoveryResponse: $discoveryResponse
+* Start up the go control plane
+
+#+begin_src tmate :dir ~/Projects/envoy/go-control-plane
+make example
+#+end_src
+
+
+When it is up, we should be able to hit localhost:10000 and be redirected to envoyproxy.io
+#+begin_src shell
+curl localhost:10000
+#+end_src
+
+#+RESULTS:
+: Redirecting to https://www.envoyproxy.io/
+
+The go control plane is at localhost:18000, and reachable only through gRPC.  If we curl, we'll see a binary file response.
+The admin panel, though, is at :19000
+#+begin_src shell :results output
+echo "SERVER STATUS: $(curl localhost:19000/ready)"
+curl localhost:19000/help
+#+end_src
+
+#+RESULTS:
+#+begin_example
+SERVER STATUS: LIVE
+admin commands are:
+  /: Admin home page
+  /certs: print certs on machine
+  /clusters: upstream cluster status
+  /config_dump: dump current Envoy configs (experimental)
+  /contention: dump current Envoy mutex contention stats (if enabled)
+  /cpuprofiler: enable/disable the CPU profiler
+  /drain_listeners: drain listeners
+  /healthcheck/fail: cause the server to fail health checks
+  /healthcheck/ok: cause the server to pass health checks
+  /heapprofiler: enable/disable the heap profiler
+  /help: print out list of admin commands
+  /hot_restart_version: print the hot restart compatibility version
+  /init_dump: dump current Envoy init manager information (experimental)
+  /listeners: print listener info
+  /logging: query/change logging levels
+  /memory: print current allocation/heap usage
+  /quitquitquit: exit the server
+  /ready: print server state, return 200 if LIVE, otherwise return 503
+  /reopen_logs: reopen access logs
+  /reset_counters: reset all counters to zero
+  /runtime: print runtime values
+  /runtime_modify: modify runtime values
+  /server_info: print server version/status information
+  /stats: print server stats
+  /stats/prometheus: print server stats in prometheus format
+  /stats/recentlookups: Show recent stat-name lookups
+  /stats/recentlookups/clear: clear list of stat-name lookups and counter
+  /stats/recentlookups/disable: disable recording of reset stat-name lookup names
+  /stats/recentlookups/enable: enable recording of reset stat-name lookup names
+#+end_example
+
+* First pass

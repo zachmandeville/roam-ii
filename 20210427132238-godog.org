@@ -1,0 +1,17 @@
+#+title: Godog
+
+Official [[file:20210427134547-bdd.org][BDD]] framework for golang. It is itended to work with the [[file:20210427135853-gherkin.org][gherkin]] language.
+
+We are looking at it for our work with the [[file:20210414140102-xds_conformance.org][xDS Conformance]] suite.
+
+
+
+* Homepage
+https://github.com/cucumber/godog#godog
+#+begin_quote
+Package godog is the official Cucumber BDD framework for Golang, it merges
+specification and test documentation into one cohesive whole, using Gherkin
+formatted scenarios in the format of Given, When, Then.
+#+end_quote
+
+*

@@ -26,6 +26,10 @@ func registerServer(grpcServer *grpc.Server, server server.Server) {
 #+end_example
 [[file:~/Projects/envoy/go-control-plane/internal/example/server.go::func registerServer(grpcServer *grpc.Server, server server.Server) {][source]]
 
+
+* Cluster proto
+https://sourcegraph.com/github.com/envoyproxy/envoy/-/blob/api/envoy/config/cluster/v3/cluster.proto#L46:1
+
 ---
 
 [[file:20210414163258-envoy_questions.org][envoy questions]]

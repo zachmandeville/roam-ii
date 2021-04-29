@@ -1,3 +1,13 @@
 #+title: EDS
 
 Endpoint Discovery Service.  This is a replacement for [[file:20210322140137-sds.org][SDS]] mostly cos SDS is a terrible name. It also utilizes [[file:20210217094935-grpc.org][gRPC]]'s bidirectional streaming, to be able to send out load/health info back to the server.
+
+This is going to be related to the cluster load assignment
+[[repo:^github\.com/envoyproxy/envoy$@048f3b8 file:^api/envoy/config/endpoint/v3/endpoint\.proto][proto]]
+
+What this enables is for your cluster's endpoints to be dynamically configured.  so that instead of you having to statically define the endpoints, you can have the actual load balancing and such managed by a server that youa re dynamically updating.  so you know you have clustes but you don't need to know where they are, that is handled by the endpoint discovery service.
+
+The endpoints might be better to think of as 'locales' like zones of Europe/NA/SA etc, and within these you'll get into the ip addresses and port addresses etc.
+
+----
+- [[file:20210216102259-envoy_proxy.org][Envoy Proxy]] [[file:20210217092742-xds.org][xDS]] [[file:20210414140102-xds_conformance.org][xDS Conformance]]
